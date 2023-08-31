@@ -19,7 +19,6 @@ export class RightPaneView extends ItemView {
   constructor(leaf: WorkspaceLeaf, plugin: RescueTimePlugin) {
     super(leaf);
     this._plugin = plugin;
-    // console.log({"this._plugin:": this._plugin}) // this is OK
   }
 
   getViewType() {
@@ -85,8 +84,7 @@ export class RightPaneView extends ItemView {
         ResolutionTime.MINUTE
       )
 
-
-      if (isFetchedDataAndHeaders(dataAndHeaders) && dataAndHeaders.data && dataAndHeaders.data.convertedRows) {
+      if (isFetchedDataAndHeaders(dataAndHeaders) && dataAndHeaders.data && dataAndHeaders.data.convertedRows) {        
         productivityPulseChart = await renderProductivityPulseChart(dataAndHeaders.data.convertedRows)
       } else if (isApiStatus(dataAndHeaders)) {
         await status.setText(`${dataAndHeaders}`)

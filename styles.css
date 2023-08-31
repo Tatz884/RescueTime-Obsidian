@@ -9,8 +9,8 @@ If your plugin does not need CSS, delete this file.
 .wrapper {
     display: grid;
     grid-template:
-        "status" 30px
-        "productivityChart" 200px
+        "status" 50px
+        "productivityChart" 180px
         "doughnutTitle" 30px
         "doughnutContainer" 150px
         "barHourlyChart" 200px
@@ -18,11 +18,12 @@ If your plugin does not need CSS, delete this file.
     overflow: hidden;
     align-items: center;
     align-content: center;
-    background-color: black;
     font: white;
 }
 
 .status {
+    grid-area: status;
+    align-self: self-end;
     grid-area: status;
     font-size: 15px;
     color: white;
@@ -33,10 +34,11 @@ If your plugin does not need CSS, delete this file.
     width: 100%;
     max-width: 284px;
     height: 100%;
-    max-height: 200px;
+    max-height: 180px;
 }
 
 .doughnutTitle {
+    align-self: self-start;
     grid-area: doughnutTitle;
     font-size: 15px;
     color: white;

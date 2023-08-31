@@ -16,7 +16,7 @@ function findMatchingIndex(period: Period, resolutionTime: ResolutionTime): numb
 export async function setFetchedData(fetchedItem: FetchedDataAndHeaders): Promise<void> {
     const { headers, data } = fetchedItem;
     const matchingIndex = findMatchingIndex({start: headers.period.start, end: headers.period.end},
-    ResolutionTime.HOUR);
+    headers.resolutionTime);
 
     // If headers.period and headers.resolutionTime do not match existing fetchedDataAndHeaders, then just push fetchedDataAndHeaders
     if (matchingIndex === -1) {

@@ -41,7 +41,7 @@ export default class RescueTimePlugin extends Plugin {
 		if (!this.response) {
 			throw new Error("Failed to fetch data today.");
 		}
-		setFetchedData(this.response);
+		await setFetchedData(this.response);
 
 		if (this.response.headers.apiStatus && this.response.headers.apiStatus === ApiStatus.AVAILABLE && this.response.data?.convertedRows) {
 			

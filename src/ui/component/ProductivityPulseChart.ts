@@ -6,7 +6,7 @@ import { enUS } from 'date-fns/locale';
 Chart.register(LineController, LineElement, PointElement, LinearScale, Title, TimeScale );
 
 
-export function renderProductivityPulseChart(rows: Row[]) {
+export async function renderProductivityPulseChart(rows: Row[]) {
     const pulsesByInterval = calculateProductivityPulsesBy5MinInterval(rows);
 
     
@@ -62,7 +62,6 @@ export function renderProductivityPulseChart(rows: Row[]) {
         gradient.addColorStop(0.75, getYColor(25));  // corresponds to 75%
         gradient.addColorStop(1, getYColor(0));      // corresponds to 100%
 
-        console.log({"gradient": gradient})
         return gradient;
     }
     
@@ -121,7 +120,6 @@ export function renderProductivityPulseChart(rows: Row[]) {
                         callbacks: {
                             labelColor: function(tooltipItem) {
                                 const value = Number(tooltipItem.formattedValue);
-                                console.log(value);
                                 const color = getInterpolatedColor(value);
                                 return {
                                     borderColor: color,

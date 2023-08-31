@@ -1,96 +1,57 @@
-# Obsidian Sample Plugin
+# RescueTime Obsidian Plugin
 
-This is a sample plugin for Obsidian (https://obsidian.md).
+View your activity logs from RescueTime in Obsidian.
 
-This project uses Typescript to provide type checking and documentation.
-The repo depends on the latest plugin API (obsidian.d.ts) in Typescript Definition format, which contains TSDoc comments describing what it does.
+## Installation
 
-**Note:** The Obsidian API is still in early alpha and is subject to change at any time!
+### Prerequisite
+- RescueTime Apps in your devices [Install here](https://www.rescuetime.com/get_rescuetime)
+- Obsidian Desktop Client > v 0.13.0 [Install here](https://obsidian.md/)
+> [!NOTE]
+> This plugin is not compatible with Obsidian mobile clients.
+### Install RescueTime Obsidian Plugin
 
-This sample plugin demonstrates some of the basic functionality the plugin API can do.
-- Adds a ribbon icon, which shows a Notice when clicked.
-- Adds a command "Open Sample Modal" which opens a Modal.
-- Adds a plugin setting tab to the settings page.
-- Registers a global click event and output 'click' to the console.
-- Registers a global interval which logs 'setInterval' to the console.
+![Installation](./assets/Installation.png)
 
-## First time developing plugins?
+1. Open the setting tab at the bottom left of your Obsidian client.
+2. In "Option", lick "Community Plugins" .
+3. Click "Browse", then search for "RescueTime", and install it.
+4. Enable "RescueTime" plugin. 
 
-Quick starting guide for new plugin devs:
+To display the data from RescueTime in Obsidian, you need to set API token in the plugin setting - see below.
+### Set API token
 
-- Check if [someone already developed a plugin for what you want](https://obsidian.md/plugins)! There might be an existing plugin similar enough that you can partner up with.
-- Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
-- Make changes to `main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
 
-## Releasing new releases
+![Obtain API key from Rescue Time](./assets/ObtainAPIkeyFromRT.png)
+1. Get API token from [API management page of RescueTime](https://www.rescuetime.com/anapi/manage). Go to "Create a new API key" with a reference label that you can type anything (say, "obsidian integration"). You don't have to change "Allow queries from: ". Click "Activate this key" and copy the key.
+   
+![Set API token in the plugin setting](./assets/SetAPItoken.png)
+2. In the setting tab, now "Community plugins" has 'RescueTime'. Paste the copied key in "API token".
+3. To test API connection, click "connect" in "API connection test".
 
-- Update your `manifest.json` with your new version number, such as `1.0.1`, and the minimum Obsidian version required for your latest release.
-- Update your `versions.json` file with `"new-plugin-version": "minimum-obsidian-version"` so older versions of Obsidian can download an older version of your plugin that's compatible.
-- Create new GitHub release using your new version number as the "Tag version". Use the exact version number, don't include a prefix `v`. See here for an example: https://github.com/obsidianmd/obsidian-sample-plugin/releases
-- Upload the files `manifest.json`, `main.js`, `styles.css` as binary attachments. Note: The manifest.json file must be in two places, first the root path of your repository and also in the release.
-- Publish the release.
+That's it! Now you should be able to view the data from RescueTime.
 
-> You can simplify the version bump process by running `npm version patch`, `npm version minor` or `npm version major` after updating `minAppVersion` manually in `manifest.json`.
-> The command will bump version in `manifest.json` and `package.json`, and add the entry for the new version to `versions.json`
+## View RescueTime data
 
-## Adding your plugin to the community plugin list
+![Right Pane](./assets/RightPane.png)
+Click "Expand" icon at the top right corner to expand the right pane and find the RescueTime icon.
+### The data graph (as of v 0.1.0)
 
-- Check https://github.com/obsidianmd/obsidian-releases/blob/master/plugin-review.md
-- Publish an initial version.
-- Make sure you have a `README.md` file in the root of your repo.
-- Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
+#### Today's productivity pulse chart
+![ProductivityPulseChart](./assets/ProductivityPulseChart.png)
+The chart tracks the change of today's productivity pulse.
+Your RescueTime clients sends data to the RescueTime server every 30 minutes for free users, and 3 minutes for pro users. Thus, you will get the data update with these intervals.
 
-## How to use
+#### Breakdown by productivity doughnut chart
+![BreakdownByProducitivty](./assets/BreakdownByProducitivty.png)
+The chart shows the present productivity pulse and the percentages of each productivity score ("Very productive", "Productive", "Neutral", "Distracting", "Very distracting") today.
 
-- Clone this repo.
-- Make sure your NodeJS is at least v16 (`node --version`).
-- `npm i` or `yarn` to install dependencies.
-- `npm run dev` to start compilation in watch mode.
+#### Hourly productivity panels
+![HourlyBarChart](./assets/HourlyBarChart.png)
+The panel shows the breakdown by productivity every hour.
 
-## Manually installing the plugin
-
-- Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
-
-## Improve code quality with eslint (optional)
-- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code. 
-- To use eslint with this project, make sure to install eslint from terminal:
-  - `npm install -g eslint`
-- To use eslint to analyze this project use this command:
-  - `eslint main.ts`
-  - eslint will then create a report with suggestions for code improvement by file and line number.
-- If your source code is in a folder, such as `src`, you can use eslint with this command to analyze all files in that folder:
-  - `eslint .\src\`
-
-## Funding URL
-
-You can include funding URLs where people who use your plugin can financially support it.
-
-The simple way is to set the `fundingUrl` field to your link in your `manifest.json` file:
-
-```json
-{
-    "fundingUrl": "https://buymeacoffee.com"
-}
-```
-
-If you have multiple URLs, you can also do:
-
-```json
-{
-    "fundingUrl": {
-        "Buy Me a Coffee": "https://buymeacoffee.com",
-        "GitHub Sponsor": "https://github.com/sponsors",
-        "Patreon": "https://www.patreon.com/"
-    }
-}
-```
-
-## API Documentation
-
-See https://github.com/obsidianmd/obsidian-api
+#### Category vs Time Spent panel
+![CategoryVSTimeSpent](./assets/CategoryVSTimeSpent.png)
+The panel shows the top 10 categories you have worked on today.
+> [!NOTE]
+> The shown categories are sub categories, and different from top-level categories. See [Manage categories](https://www.rescuetime.com/categories) in your RescueTime setting for how your sub categories correspond to top-level categories.
