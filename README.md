@@ -8,7 +8,7 @@ View your activity logs from RescueTime in Obsidian.
 - RescueTime Account and Apps in your devices [Install here](https://www.rescuetime.com/get_rescuetime)
 - Obsidian Desktop Client > v 0.13.0 [Install here](https://obsidian.md/)
 > [!NOTE]
-> This plugin is not compatible with Obsidian mobile clients.
+> This plugin is compatible only with Obsidian desktop clients, but not with mobile.
 ### Install RescueTime Obsidian Plugin
 
 ![Installation](./assets/Installation.png)
