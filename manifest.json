@@ -1,0 +1,10 @@
+{
+	"id": "rescuetime",
+	"name": "RescueTime",
+	"version": "0.1.0",
+	"minAppVersion": "0.13.0",
+	"description": "View your RescueTime data in obsidian.",
+	"author": "Tatsuya Hayashi",
+	"authorUrl": "https://github.com/Tatz884",
+	"isDesktopOnly": true
+}
