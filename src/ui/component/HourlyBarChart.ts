@@ -4,10 +4,7 @@ import { Row } from "../../model/FetchedData"
 
 import { Chart, BarController, CategoryScale, LinearScale, BarElement, PieController, ArcElement, Tooltip} from 'chart.js';
 Chart.register(BarController, CategoryScale, LinearScale, BarElement, PieController, ArcElement, Tooltip);
-Chart.defaults.borderColor = "#FFFFFF";
-Chart.defaults.color = "#FFFFFF";
 
-// Render hourly bar charts
 // Render hourly bar charts
 
 
@@ -52,6 +49,15 @@ function filterRelevantHours(hourlyProductivityTotals: HourlyProductivityTotalsT
 }
 
 export async function renderHourlyBarChart(rows: Row[]) {
+
+    if (document.body.classList.contains("theme-dark")) {
+        Chart.defaults.borderColor = "#FFFFFF";
+        Chart.defaults.color = "#FFFFFF";
+    } else {
+        Chart.defaults.borderColor = "#000000";
+        Chart.defaults.color = "#000000";
+    }
+
     const hourlyProductivityTotals = processHourlyProductivity(rows);
     const ctx = await document.querySelector('.barHourlyChart') as HTMLCanvasElement | null;
 
@@ -93,7 +99,7 @@ export async function renderHourlyBarChart(rows: Row[]) {
                     position: 'top',
                 },
                 title: {
-                    display: true,
+                    display: false,
                     text: 'Hourly Productivity'
                 },
                 tooltip: {

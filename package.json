@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "dev": "node esbuild.config.mjs",
-    "build": "webpack",
+    "build": "webpack --watch",
     "version": "node version-bump.mjs && git add manifest.json versions.json"
   },
   "directories": {

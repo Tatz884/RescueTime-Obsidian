@@ -3,9 +3,6 @@ import { colorMapping, scoreMapping } from "../../util/ComponentHelpers";
 
 import { Chart, BarController, CategoryScale, LinearScale, BarElement, PieController, ArcElement, Tooltip} from 'chart.js';
 Chart.register(BarController, CategoryScale, LinearScale, BarElement, PieController, ArcElement, Tooltip);
-Chart.defaults.borderColor = "#FFFFFF";
-Chart.defaults.color = "#FFFFFF";
-
 function aggregateByProductivityScore(rows: Row[]): { [score: number]: number } {
     return rows.reduce((acc, row) => {
         const timeSpent = row.timeSpentSeconds;
@@ -19,8 +16,16 @@ function aggregateByProductivityScore(rows: Row[]): { [score: number]: number } 
 }
 
 export async function renderDoughnutChart(rows: any[]) {
+
+    if (document.body.classList.contains("theme-dark")) {
+        Chart.defaults.borderColor = "#FFFFFF";
+        Chart.defaults.color = "#FFFFFF";
+    } else {
+        Chart.defaults.borderColor = "#000000";
+        Chart.defaults.color = "#000000";
+    }
+
     const ctx = (document.querySelector('.doughnutChart') as HTMLCanvasElement).getContext('2d');
-    console.log(ctx)
     const aggregatedData = aggregateByProductivityScore(rows);
     const labels = Object.keys(aggregatedData).map(label => parseInt(label)).sort((a, b) => a - b);
     const data = labels.map(label => aggregatedData[label]);
@@ -33,7 +38,7 @@ export async function renderDoughnutChart(rows: any[]) {
                 labels: labels,
                 datasets: [{
                     data: data,
-                    backgroundColor: backgroundColors
+                    backgroundColor: backgroundColors,
                 }]
             },
             options: {
@@ -45,7 +50,6 @@ export async function renderDoughnutChart(rows: any[]) {
                     },
                     title: {
                         display: false,
-                        text: 'Productivity pulse'
                     },
                     tooltip: {
                         callbacks: {

@@ -2,6 +2,7 @@
 
 View your activity logs from RescueTime in Obsidian.
 
+![LiveDemo](./assets/LiveDemo.gif)
 ## Installation
 
 ### Prerequisite

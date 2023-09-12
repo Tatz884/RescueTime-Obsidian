@@ -3,9 +3,6 @@ import { secondsToMinutes, formatTime } from "../../util/TimeHelpers";
 import { Chart, BarController, CategoryScale, LinearScale, BarElement, PieController, ArcElement, Tooltip} from 'chart.js';
 import { colorMapping } from "../../util/ComponentHelpers";
 Chart.register(BarController, CategoryScale, LinearScale, BarElement, PieController, ArcElement, Tooltip);
-Chart.defaults.borderColor = "#FFFFFF";
-Chart.defaults.color = "#FFFFFF";
-
 
 function aggregateByCategory(rows: Row[]): { aggregatedData: Record<string, number>, categoryToProductivityScore: Record<string, number> } {
     const aggregatedData: Record<string, number> = {};
@@ -92,6 +89,17 @@ function processAndMapLabels(rawLabels: string[], processLabels: boolean): { pro
  * If you see the label is off, you want to manually modify labelOffset in xticks
  */
 export async function renderCategoryBarChart(rows: Row[], numCategories: number = 10, processLabels: boolean = true) {
+    
+    if (document.body.classList.contains("theme-dark")) {
+        Chart.defaults.borderColor = "#FFFFFF";
+        Chart.defaults.color = "#FFFFFF";
+    } else {
+        Chart.defaults.borderColor = "#000000";
+        Chart.defaults.color = "#000000";
+    }
+    
+    
+
     const ctx = (document.querySelector('.barCategoryChart') as HTMLCanvasElement).getContext('2d');
     const { aggregatedData, categoryToProductivityScore } = aggregateByCategory(rows);
     const topAggregatedData = getTopNCategories(aggregatedData, numCategories);
@@ -121,7 +129,7 @@ export async function renderCategoryBarChart(rows: Row[], numCategories: number 
                         display: false // Hide legend
                     },
                     title: {
-                        display: true,
+                        display: false,
                         text: 'Category vs Time Spent'
                     },
                     tooltip: {

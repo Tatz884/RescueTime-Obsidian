@@ -30,7 +30,10 @@ export class RightPaneView extends ItemView {
   }
 
   async onOpen() {
+
+
     const container = this.containerEl.children[1];
+    container.setAttribute('style', 'backgroundColor: black;');
     container.empty();
     container.createEl("h4", { text: "RescueTime dashboard" });
     const reloadButton = container.createEl("button", { text: "reload", cls: "reloadButton" });
@@ -41,11 +44,13 @@ export class RightPaneView extends ItemView {
     const wrapper = container.createEl("div", { cls: "wrapper"});
     const status = wrapper.createEl("div", { cls: "status"});
     const productivityChart = wrapper.createEl("canvas", {cls: "productivityChart"})
-    const doughnutTitle = wrapper.createEl("div", { text: "Breakdown by productivity", cls: "doughnutTitle" });
+    const doughnutTitle = wrapper.createEl("div", { text: "Today's productivity pulse", cls: "doughnutTitle" });
     const doughnutContainer = wrapper.createEl("div", { cls: "doughnutContainer" });
     const score = doughnutContainer.createEl("div", { cls: "score" });
     const doughnutChart = doughnutContainer.createEl("canvas", { cls: "doughnutChart" });
+    const barHourlyTitle = wrapper.createEl("div", { text: "Hourly productivity", cls: "barHourlyTitle" });
     const barHourlyChart = wrapper.createEl("canvas", { cls: "barHourlyChart" });
+    const barCategoryTitle = wrapper.createEl("div", { text: "Category vs Time Spent", cls: "barCategoryTitle" });
     const barCategoryChart = wrapper.createEl("canvas", { cls: "barCategoryChart" });
     
     let productivityPulseChart: any
@@ -118,16 +123,12 @@ export class RightPaneView extends ItemView {
         ResolutionTime.HOUR
       )
 
-
-    
-
-
       if (isFetchedDataAndHeaders(dataAndHeaders) && dataAndHeaders.data && dataAndHeaders.data.convertedRows) {
         
-        await status.setText("Today's productivity pulse:")
+        await status.setText("Time-Course Change of Today's Pulse")
         const {productivityPulse, } = calculateProductivityPulse(dataAndHeaders.data.convertedRows)
         const productivityPulseDisplay = String(Math.round(productivityPulse))
-        this._plugin.statusBarItemEl.setText(`Today's productivity pulse: ${productivityPulseDisplay}`)
+        this._plugin.statusBarItemEl.setText(`Today's Productivity Pulse: ${productivityPulseDisplay}`)
         hourlyBarChartContent = await renderHourlyBarChart(dataAndHeaders.data.convertedRows)
         doughnutChartContent = await renderDoughnutChart(dataAndHeaders.data.convertedRows)
         barCategoryChartContent = await renderCategoryBarChart(dataAndHeaders.data.convertedRows, 7, true)

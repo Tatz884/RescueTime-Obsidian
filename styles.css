@@ -1,32 +1,43 @@
-/*
+/* Default Light Theme */
+.theme-light {
+    --border-color: #000000;
+    --text-color: #000000;
+}
 
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
+/* Dark Theme */
+.theme-dark {
+    --border-color: #FFFFFF;
+    --text-color: #FFFFFF;
+}
 
-If your plugin does not need CSS, delete this file.
 
-*/
 .wrapper {
     display: grid;
     grid-template:
+        "doughnutTitle" 50px
+        "doughnutContainer" 150px
         "status" 50px
         "productivityChart" auto
-        "doughnutTitle" 30px
-        "doughnutContainer" 180px
+        "barHourlyTitle" 50px
         "barHourlyChart" auto
-        "barCategoryChart" auto / auto;
+        "barCategoryTitle" 50px
+        "barCategoryChart" auto / 300px;
     overflow: hidden;
     align-items: center;
     align-content: center;
     font: white;
+    padding-bottom: 200px;
 }
 
 .status {
     grid-area: status;
     align-self: self-end;
+    justify-self: center;
+    padding-bottom: 10px;
     grid-area: status;
     font-size: 15px;
-    color: white;
+    border-color: var(--border-color);
+    color: var(--text-color);
 }
 
 .productivityChart {
@@ -35,13 +46,17 @@ If your plugin does not need CSS, delete this file.
     max-width: 284px;
     height: 100%;
     max-height: 180px;
+    border-color: var(--border-color);
+    color: var(--text-color);
 }
 
 .doughnutTitle {
-    align-self: self-start;
+    align-self: self-end;
+    padding-bottom: 10px;
     grid-area: doughnutTitle;
     font-size: 15px;
-    color: white;
+    border-color: var(--border-color);
+    color: var(--text-color);
 }
 
 .doughnutContainer {
@@ -60,6 +75,8 @@ If your plugin does not need CSS, delete this file.
     max-width: 150px;
     height: 100%;
     max-height: 150px;
+    border-color: var(--border-color);
+    color: var(--text-color);
 }
 
 .score {
@@ -68,9 +85,19 @@ If your plugin does not need CSS, delete this file.
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 32px; /* Adjust based on your requirements */
+    font-size: 32px;
     font-weight: bold;
-    color: white; /* Adjust based on your requirements */
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+.barHourlyTitle {
+    grid-area: barHourlyTitle;
+    border-color: var(--border-color);
+    color: var(--text-color);
+    align-self: self-end;
+    justify-self: center;
+    padding-bottom: 10px;
 }
 
 .barHourlyChart {
@@ -79,6 +106,17 @@ If your plugin does not need CSS, delete this file.
     max-width: 284px;
     height: 100%;
     max-height: 200px;
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+.barCategoryTitle {
+    grid-area: barCategoryTitle;
+    border-color: var(--border-color);
+    color: var(--text-color);
+    align-self: self-end;
+    justify-self: center;
+    padding-bottom: 10px;
 }
 
 .barCategoryChart {
@@ -88,5 +126,7 @@ If your plugin does not need CSS, delete this file.
     height: 50%;
     /* min-height will distort the view here. */
     max-height: 400px;
+    border-color: var(--border-color);
+    color: var(--text-color);
 
 }

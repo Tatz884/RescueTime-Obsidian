@@ -45,7 +45,6 @@ export class AnalyticDataAPI {
     
         const url: string = this.setURL(apiToken, period, resolutionTime);
         const result = await fetchDataFromRT(url);
-        console.log({"fetch test result:" : result})
         
         let apiStatus: ApiStatus;
     
@@ -61,7 +60,6 @@ export class AnalyticDataAPI {
                     data: result
                 };
             } else if (result.rows.length === 0) {
-                console.log("isrowsEMPTY")
                 apiStatus = ApiStatus.EMPTY_DATA;
                 return {
                     headers: {
@@ -144,7 +142,6 @@ export class AnalyticDataAPI {
         try {
             const url: string = this.setURL(apiToken, period, resolutionTime);
             const result = await fetchDataFromRT(url);
-            console.log({"result":result})
     
             if (this.isDataReturnType(result)) {
             } else if (this.isQueryError(result)) {
