@@ -60,6 +60,6 @@ The panel shows the breakdown by productivity every hour.
 #### Category vs Time Spent panel
 ![CategoryVSTimeSpent](./assets/CategoryVSTimeSpent.png)
 
-The panel shows the top 10 categories you have worked on today.
+The panel shows the top 7 categories you have worked on today.
 > [!NOTE]
 > The shown categories are sub categories, and different from top-level categories. See [Manage categories](https://www.rescuetime.com/categories) in your RescueTime setting for how your sub categories correspond to top-level categories.
