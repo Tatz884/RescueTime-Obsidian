@@ -130,7 +130,7 @@ export class RightPaneView extends ItemView {
         this._plugin.statusBarItemEl.setText(`Today's productivity pulse: ${productivityPulseDisplay}`)
         hourlyBarChartContent = await renderHourlyBarChart(dataAndHeaders.data.convertedRows)
         doughnutChartContent = await renderDoughnutChart(dataAndHeaders.data.convertedRows)
-        barCategoryChartContent = await renderCategoryBarChart(dataAndHeaders.data.convertedRows, 10, true)
+        barCategoryChartContent = await renderCategoryBarChart(dataAndHeaders.data.convertedRows, 7, true)
         await getProductivityPulse(dataAndHeaders.data.convertedRows)
       } else if (isApiStatus(dataAndHeaders)) {
         await status.setText(`${dataAndHeaders}`)

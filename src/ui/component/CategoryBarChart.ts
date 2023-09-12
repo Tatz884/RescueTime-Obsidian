@@ -115,7 +115,7 @@ export async function renderCategoryBarChart(rows: Row[], numCategories: number 
                 }]
             },
             options: {
-                // ... [Rest of the options]
+                indexAxis: "y",
                 plugins: {
                     legend: {
                         display: false // Hide legend
@@ -149,18 +149,14 @@ export async function renderCategoryBarChart(rows: Row[], numCategories: number 
                     }
                 },
                 scales: {
-                    x: {
-                        position: 'top',
+                    y: {
                         ticks: {
                             autoSkip: false,
-                            labelOffset: 15,
-                            maxRotation: 90,
-                            minRotation: 90,
                         }
                     },
-                    y: {
+                    x: {
+                        position: 'top',
                         beginAtZero: true,
-                        reverse: true,
                         ticks: {
                             callback: function(value, index, values) {
                                 return value + ' min';

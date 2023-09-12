@@ -47,7 +47,7 @@ The chart tracks the change of today's productivity pulse.
 Your RescueTime clients sends data to the RescueTime server every 30 minutes for free users, and 3 minutes for pro users. Thus, you will get the data update with these intervals.
 
 #### Breakdown by productivity doughnut chart
-![BreakdownByProductitivty](./assets/BreakdownByProductitivty.png)
+![BreakdownByProductivity](./assets/BreakdownByProductivity.png)
 
 The chart shows the present productivity pulse and the percentages of each productivity score ("Very productive", "Productive", "Neutral", "Distracting", "Very distracting") today.
 

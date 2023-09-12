@@ -1,11 +1,11 @@
 {
   "name": "rescuetime",
-  "version": "1.0.0",
+  "version": "0.1.1",
   "description": "This is a sample plugin for Obsidian (https://obsidian.md).",
   "main": "main.js",
   "scripts": {
     "dev": "node esbuild.config.mjs",
-    "build": "webpack --watch",
+    "build": "webpack",
     "version": "node version-bump.mjs && git add manifest.json versions.json"
   },
   "directories": {
@@ -138,5 +138,5 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "MIT"
 }
