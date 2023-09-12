@@ -41,23 +41,23 @@ That's it! Now you should be able to view the data from RescueTime.
 Click "Expand" icon at the top right corner to expand the right pane and find the RescueTime icon.
 ### The data graph (as of v 0.1.2)
 
-#### Today's productivity pulse chart
+#### Today's Productivity Pulse
+![BreakdownByProductivity](./assets/BreakdownByProductivity.png)
+
+The chart shows the present productivity pulse and the percentages of each productivity score ("Very productive", "Productive", "Neutral", "Distracting", "Very distracting") today.
+
+#### Time-Course of Today's Pulse
 ![ProductivityPulseChart](./assets/ProductivityPulseChart.png)
 
 The chart tracks the change of today's productivity pulse.
 Your RescueTime clients sends data to the RescueTime server every 30 minutes for free users, and 3 minutes for pro users. Thus, you will get the data update with these intervals.
 
-#### Breakdown by productivity doughnut chart
-![BreakdownByProductivity](./assets/BreakdownByProductivity.png)
-
-The chart shows the present productivity pulse and the percentages of each productivity score ("Very productive", "Productive", "Neutral", "Distracting", "Very distracting") today.
-
-#### Hourly productivity panels
+#### Hourly Productivity
 ![HourlyBarChart](./assets/HourlyBarChart.png)
 
 The panel shows the breakdown by productivity every hour.
 
-#### Category vs Time Spent panel
+#### Category vs Time Spent
 ![CategoryVSTimeSpent](./assets/CategoryVSTimeSpent.png)
 
 The panel shows the top 7 categories you have worked on today.
