@@ -39,7 +39,7 @@ That's it! Now you should be able to view the data from RescueTime.
 ![Right Pane](./assets/RightPane.png)
 
 Click "Expand" icon at the top right corner to expand the right pane and find the RescueTime icon.
-### The data graph (as of v 0.1.0)
+### The data graph (as of v 0.1.2)
 
 #### Today's productivity pulse chart
 ![ProductivityPulseChart](./assets/ProductivityPulseChart.png)
