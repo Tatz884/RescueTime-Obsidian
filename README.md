@@ -1,7 +1,7 @@
 # RescueTime Obsidian Plugin
 
 View your activity logs from RescueTime in Obsidian.
-
+![OverView](./assets/OverView.png)
 ![LiveDemo](./assets/LiveDemo.gif)
 ## Installation
 
@@ -34,32 +34,22 @@ To display the data from RescueTime in Obsidian, you need to set API token in th
 
 That's it! Now you should be able to view the data from RescueTime.
 
-## View RescueTime data
+## View RescueTime dashboard for today
 
 ![Right Pane](./assets/RightPane.png)
 
 Click "Expand" icon at the top right corner to expand the right pane and find the RescueTime icon.
-### The data graph (as of v 0.1.2)
-
-#### Today's Productivity Pulse
-![BreakdownByProductivity](./assets/BreakdownByProductivity.png)
-
-The chart shows the present productivity pulse and the percentages of each productivity score ("Very productive", "Productive", "Neutral", "Distracting", "Very distracting") today.
-
-#### Time-Course of Today's Pulse
-![ProductivityPulseChart](./assets/ProductivityPulseChart.png)
-
-The chart tracks the change of today's productivity pulse.
-Your RescueTime clients sends data to the RescueTime server every 30 minutes for free users, and 3 minutes for pro users. Thus, you will get the data update with these intervals.
-
-#### Hourly Productivity
-![HourlyBarChart](./assets/HourlyBarChart.png)
-
-The panel shows the breakdown by productivity every hour.
-
-#### Category vs Time Spent
-![CategoryVSTimeSpent](./assets/CategoryVSTimeSpent.png)
-
-The panel shows the top 7 categories you have worked on today.
+All graphs are based on the data today.
 > [!NOTE]
-> The shown categories are sub categories, and different from top-level categories. See [Manage categories](https://www.rescuetime.com/categories) in your RescueTime setting for how your sub categories correspond to top-level categories.
+> Your RescueTime clients sends data to the RescueTime server every 30 minutes for free users, and 3 minutes for pro users. Thus, you will get the data update with these intervals.
+
+## View RescueTime data for the time period specified by you
+
+![CodeBlock](./assets/CodeBlock.png)
+![CodeBlockProcessed](./assets/CodeBlockProcessed.png)
+If you type the codeblock with the following format, then it will turn into the graphs showing the data over the period defined by you.
+```rescuetime
+FROM YYYY-MM-DD TO YYYY-MM-DD
+```
+> [!NOTE]
+> Currently, this code block only supports the time periods spanning less than or equal to 31 days. Also you need to specify the time range starting 92 or less days before today. Querying the period 93 or more days ago will require RescueTime Pro subscription and the developer does not have subscription...
