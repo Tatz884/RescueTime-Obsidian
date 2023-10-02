@@ -2,7 +2,7 @@
 
 View your activity logs from RescueTime in Obsidian.
 
-<img src="./assets/Overview.png" walt="Overview Image" />
+<img src="./assets/AppOverview.png" walt="Overview Image" />
 
 <img src="./assets/LiveDemo.gif" alt="Live Demo GIF" />
 
