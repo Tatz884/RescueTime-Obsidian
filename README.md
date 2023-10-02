@@ -2,7 +2,10 @@
 
 View your activity logs from RescueTime in Obsidian.
 
-![LiveDemo](./assets/LiveDemo.gif)
+<img src="./assets/Overview.png" walt="Overview Image" />
+
+<img src="./assets/LiveDemo.gif" alt="Live Demo GIF" />
+
 ## Installation
 
 ### Prerequisite
@@ -10,56 +13,50 @@ View your activity logs from RescueTime in Obsidian.
 - Obsidian Desktop Client > v 0.13.0 [Install here](https://obsidian.md/)
 > [!NOTE]
 > This plugin is compatible only with Obsidian desktop clients, but not with mobile.
+
 ### Install RescueTime Obsidian Plugin
 
-![Installation](./assets/Installation.png)
+<img src="./assets/Installation.png" alt="Installation Image" />
 
 1. Open the setting tab at the bottom left of your Obsidian client.
-2. In "Option", lick "Community Plugins" .
+2. In "Option", click "Community Plugins".
 3. Click "Browse", then search for "RescueTime", and install it.
-4. Enable "RescueTime" plugin. 
+4. Enable "RescueTime" plugin.
 
 To display the data from RescueTime in Obsidian, you need to set API token in the plugin setting - see below.
+
 ### Set API token
 
+<img src="./assets/ObtainAPIkeyFromRT.png" width="300px" alt="Obtain API key from Rescue Time Image" />
 
-![Obtain API key from Rescue Time](./assets/ObtainAPIkeyFromRT.png)
+1. Get API token from [API management page of RescueTime](https://www.rescuetime.com/anapi/manage). Go to "Create a new API key" with a reference label that you can type anything (say, "obsidian integration"). You don't have to change "Allow queries from:". Click "Activate this key" and copy the key.
 
-1. Get API token from [API management page of RescueTime](https://www.rescuetime.com/anapi/manage). Go to "Create a new API key" with a reference label that you can type anything (say, "obsidian integration"). You don't have to change "Allow queries from: ". Click "Activate this key" and copy the key.
-   
-![Set API token in the plugin setting](./assets/SetAPItoken.png)
+<img src="./assets/SetAPItoken.png" alt="Set API token in the plugin setting Image" />
 
 2. In the setting tab, now "Community plugins" has 'RescueTime'. Paste the copied key in "API token".
 3. To test API connection, click "connect" in "API connection test".
 
 That's it! Now you should be able to view the data from RescueTime.
 
-## View RescueTime data
+## View RescueTime dashboard for today
 
-![Right Pane](./assets/RightPane.png)
+<img src="./assets/RightPane.png" alt="Right Pane Image" />
 
 Click "Expand" icon at the top right corner to expand the right pane and find the RescueTime icon.
-### The data graph (as of v 0.1.2)
-
-#### Today's Productivity Pulse
-![BreakdownByProductivity](./assets/BreakdownByProductivity.png)
-
-The chart shows the present productivity pulse and the percentages of each productivity score ("Very productive", "Productive", "Neutral", "Distracting", "Very distracting") today.
-
-#### Time-Course of Today's Pulse
-![ProductivityPulseChart](./assets/ProductivityPulseChart.png)
-
-The chart tracks the change of today's productivity pulse.
-Your RescueTime clients sends data to the RescueTime server every 30 minutes for free users, and 3 minutes for pro users. Thus, you will get the data update with these intervals.
-
-#### Hourly Productivity
-![HourlyBarChart](./assets/HourlyBarChart.png)
-
-The panel shows the breakdown by productivity every hour.
-
-#### Category vs Time Spent
-![CategoryVSTimeSpent](./assets/CategoryVSTimeSpent.png)
-
-The panel shows the top 7 categories you have worked on today.
+All graphs are based on the data today.
 > [!NOTE]
-> The shown categories are sub categories, and different from top-level categories. See [Manage categories](https://www.rescuetime.com/categories) in your RescueTime setting for how your sub categories correspond to top-level categories.
+> Your RescueTime clients send data to the RescueTime server every 30 minutes for free users, and 3 minutes for pro users. Thus, you will get the data update with these intervals.
+
+## View RescueTime data for the time period specified by you
+
+<img src="./assets/CodeBlock.png" width="600px" alt="Code Block Image" />
+<img src="./assets/CodeBlockProcessed.png" width="600px" alt="Code Block Processed Image" />
+
+If you type the code block with the following format, then it will turn into the graphs showing the data over the period defined by you.
+`````markdown
+```rescuetime
+FROM YYYY-MM-DD TO YYYY-MM-DD
+```
+`````
+> [!NOTE]
+> Currently, this code block only supports the time periods spanning less than or equal to 31 days. Also you need to specify the time range starting 92 or less days before today. Querying the period 93 or more days ago will require RescueTime Pro subscription and the developer does not have subscription...
