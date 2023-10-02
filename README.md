@@ -1,9 +1,10 @@
 # RescueTime Obsidian Plugin
 
 View your activity logs from RescueTime in Obsidian.
-<img src="./assets/Overview.png" width="300px" alt="Overview Image" />
 
-<img src="./assets/LiveDemo.gif" width="300px" alt="Live Demo GIF" />
+<img src="./assets/Overview.png" walt="Overview Image" />
+
+<img src="./assets/LiveDemo.gif" alt="Live Demo GIF" />
 
 ## Installation
 
@@ -15,7 +16,7 @@ View your activity logs from RescueTime in Obsidian.
 
 ### Install RescueTime Obsidian Plugin
 
-<img src="./assets/Installation.png" width="300px" alt="Installation Image" />
+<img src="./assets/Installation.png" alt="Installation Image" />
 
 1. Open the setting tab at the bottom left of your Obsidian client.
 2. In "Option", click "Community Plugins".
@@ -30,7 +31,7 @@ To display the data from RescueTime in Obsidian, you need to set API token in th
 
 1. Get API token from [API management page of RescueTime](https://www.rescuetime.com/anapi/manage). Go to "Create a new API key" with a reference label that you can type anything (say, "obsidian integration"). You don't have to change "Allow queries from:". Click "Activate this key" and copy the key.
 
-<img src="./assets/SetAPItoken.png" width="300px" alt="Set API token in the plugin setting Image" />
+<img src="./assets/SetAPItoken.png" alt="Set API token in the plugin setting Image" />
 
 2. In the setting tab, now "Community plugins" has 'RescueTime'. Paste the copied key in "API token".
 3. To test API connection, click "connect" in "API connection test".
@@ -39,7 +40,7 @@ That's it! Now you should be able to view the data from RescueTime.
 
 ## View RescueTime dashboard for today
 
-<img src="./assets/RightPane.png" width="300px" alt="Right Pane Image" />
+<img src="./assets/RightPane.png" alt="Right Pane Image" />
 
 Click "Expand" icon at the top right corner to expand the right pane and find the RescueTime icon.
 All graphs are based on the data today.
