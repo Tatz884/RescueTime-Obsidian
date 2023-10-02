@@ -6,7 +6,7 @@ interface AccumulatorType {
 }
 
 
-export function calculateProductivityPulsesBy5MinInterval(rows: Row[]): Map<string, number | null> {
+export async function calculateProductivityPulsesBy5MinInterval(rows: Row[]): Promise<Map<string, number | null>> {
     const productivityPulsesBy5MinInterval: Map<string, number | null> = new Map();
 
     const endTime = rows[rows.length - 1].date;
@@ -29,7 +29,7 @@ export function calculateProductivityPulsesBy5MinInterval(rows: Row[]): Map<stri
         }
 
         // Calculate productivity pulse for the interval
-        const { productivityPulse, timeSum } = calculateProductivityPulse(intervalRows);
+        const { productivityPulse, timeSum } = await calculateProductivityPulse(intervalRows);
 
         if (cumulativeTime + timeSum === 0) {
             cumulativeProductivity = 0;
@@ -51,8 +51,11 @@ export function calculateProductivityPulsesBy5MinInterval(rows: Row[]): Map<stri
     return productivityPulsesBy5MinInterval;
 }
 
-export function calculateProductivityPulse(rows: Row[]): { productivityPulse: number, timeSum: number } {
+export async function calculateProductivityPulse(rows: Row[]): Promise<{ productivityPulse: number; timeSum: number; }> {
     const totalScoreAndTime: AccumulatorType = rows.reduce((accumulator: AccumulatorType, entry: Row) => {
+        if (entry.productivity === undefined) {
+            throw new Error("productivity cannot be obtained from the fetched data")
+        }
         accumulator.productivityPulseSum += (entry.productivity + 2) * entry.timeSpentSeconds;
         accumulator.timeSum += entry.timeSpentSeconds;
         return accumulator;
@@ -70,16 +73,15 @@ export function calculateProductivityPulse(rows: Row[]): { productivityPulse: nu
 }
 
 
-export function setDisplayScore(productivityPulse: number) {
-    const displayScore = document.querySelector('.score');
+export function setDisplayScore(productivityPulse: number, displayScore: Element | null) {
     if (displayScore) {
         displayScore.textContent = String(Math.round(productivityPulse));
     }
 }
 
 // If you want to use both functions together:
-export async function getProductivityPulse(rows: Row[]) {
-    const {productivityPulse, } = calculateProductivityPulse(rows);
-    setDisplayScore(productivityPulse);
+export async function getProductivityPulse(rows: Row[], displayScore: Element | null) {
+    const {productivityPulse, } = await calculateProductivityPulse(rows);
+    setDisplayScore(productivityPulse, displayScore);
 }
 

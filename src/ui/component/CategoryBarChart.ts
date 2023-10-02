@@ -9,9 +9,17 @@ function aggregateByCategory(rows: Row[]): { aggregatedData: Record<string, numb
     const categoryToProductivityScore: Record<string, number> = {};
 
     rows.forEach(row => {
+
+        if (row.productivity === undefined) {
+            throw new Error("productivity cannot be obtained from the fetched data")
+        }
+        if (row.category === undefined) {
+            throw new Error("category cannot be obtained from the fetched data")
+        }
         const seconds = row.timeSpentSeconds;
         const category = row.category;
         const productivityScore = row.productivity;
+
 
         aggregatedData[category] = (aggregatedData[category] || 0) + seconds;
         categoryToProductivityScore[category] = productivityScore;  // Assumed constant for category
@@ -22,6 +30,12 @@ function aggregateByCategory(rows: Row[]): { aggregatedData: Record<string, numb
 
 function aggregateActivitiesByCategory(rows: Row[]): Record<string, string[]> {
     return rows.reduce((acc, row) => {
+        if (row.activity === undefined) {
+            throw new Error("activity cannot be obtained from the fetched data")
+        }
+        if (row.category === undefined) {
+            throw new Error("category cannot be obtained from the fetched data")
+        }
         const activity = row.activity;
         const category = row.category;
 

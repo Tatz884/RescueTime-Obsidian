@@ -4,6 +4,10 @@ export const today = `${time.getFullYear()}-${time.getMonth() + 1}-${time.getDat
 export function secondsToMinutes(seconds: number): number {
     return seconds / 60;
 }
+
+export function secondsToHours(seconds: number): number {
+    return seconds / 3600;
+}
   
 export function formatTime(timeInSec: number): string {
     const hours = Math.floor(timeInSec / 3600);
@@ -27,4 +31,13 @@ export function formatDateToCustomString(date: Date): string {
     const seconds = String(date.getSeconds()).padStart(2, '0');
 
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
+export function formatDateLabel(input: string): string {
+    const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+    const date = new Date(input);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const dayName = days[date.getDay()];
+    return `${month}/${day} ${dayName}`;
 }

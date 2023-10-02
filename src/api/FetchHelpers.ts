@@ -1,6 +1,7 @@
 import { requestUrl, request} from 'obsidian'
 import { QueryError, InternetError, OtherError, Errors} from "../model/ApiErrors"
-import { Row, DataReturnType } from 'src/model/FetchedData';
+import { Row, DataReturnType } from '../model/FetchedData';
+import { RestrictKind } from '../model/DataStore';
 
 // http headers used on every call to the RescueTime API.
 const headers = {
@@ -31,32 +32,76 @@ export async function fetchDataFromRT<T = DataReturnType>(url: string): Promise<
 
 
 
-function arrayToRow(data: any[]): Row {
-    return {
-        date: new Date(data[0]),
-        timeSpentSeconds: data[1],
-        numberOfPeople: data[2],
-        activity: data[3],
-        category: data[4],
-        productivity: data[5]
-    };
+function arrayToRow(data: any[], restrict_kind: RestrictKind): Row {
+    if (restrict_kind === RestrictKind.ACTIVITY) {
+        return {
+            date: new Date(data[0]),
+            timeSpentSeconds: data[1],
+            numberOfPeople: data[2],
+            activity: data[3],
+            category: data[4],
+            productivity: data[5]
+        };
+    } if (restrict_kind === RestrictKind.OVERVIEW) {
+        return {
+            date: new Date(data[0]),
+            timeSpentSeconds: data[1],
+            numberOfPeople: data[2],
+            category: data[3],
+        };
+    } if (restrict_kind === RestrictKind.PRODUCTIVITY) {
+        return {
+            date: new Date(data[0]),
+            timeSpentSeconds: data[1],
+            numberOfPeople: data[2],
+            productivity: data[3],
+        };
+    } else {
+        throw new Error("restrict kind is unexpected")
+    }
 }
 
-const expectedHeaders = [
-    "Date",
-    "Time Spent (seconds)",
-    "Number of People",
-    "Activity",
-    "Category",
-    "Productivity"
-];
 
-// Converts received data arrays into Row objects
-export function convertToRows(dataArrays: any[][]): Row[] {
-    return dataArrays.map(arrayToRow);
+
+
+
+// Converts received data arrays into Row objects,
+// to allow the developers to write a more readable code 
+// (e.g. you can now write like convertedRow.date)
+export function convertToRows(dataArrays: any[][], restrict_kind: RestrictKind): Row[] {
+    return dataArrays.map(data => arrayToRow(data, restrict_kind));
 }
 
-export function validateHeaders(actualHeaders: string[]): boolean {
+const expectedHeadersMap = {
+    [RestrictKind.ACTIVITY]: [
+        "Date",
+        "Time Spent (seconds)",
+        "Number of People",
+        "Activity",
+        "Category",
+        "Productivity"
+    ],
+    [RestrictKind.OVERVIEW]: [
+        "Date",
+        "Time Spent (seconds)",
+        "Number of People",
+        "Category"
+    ],
+    [RestrictKind.PRODUCTIVITY]: [
+        "Date",
+        "Time Spent (seconds)",
+        "Number of People",
+        "Productivity"
+    ]
+};
+
+export function validateHeaders(actualHeaders: string[], restrict_kind: RestrictKind): boolean {
+    const expectedHeaders = expectedHeadersMap[restrict_kind];
+
+    if (!expectedHeaders) {
+        throw new Error(`Unknown restrict_kind: ${restrict_kind}`);
+    }
+
     if (actualHeaders.length !== expectedHeaders.length) {
         return false;
     }
@@ -68,3 +113,4 @@ export function validateHeaders(actualHeaders: string[]): boolean {
     }
     return true;
 }
+

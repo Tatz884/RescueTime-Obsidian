@@ -5,6 +5,9 @@ import { Chart, BarController, CategoryScale, LinearScale, BarElement, PieContro
 Chart.register(BarController, CategoryScale, LinearScale, BarElement, PieController, ArcElement, Tooltip);
 function aggregateByProductivityScore(rows: Row[]): { [score: number]: number } {
     return rows.reduce((acc, row) => {
+        if (row.productivity === undefined) {
+            throw new Error("productivity cannot be obtained from the fetched data")
+        }
         const timeSpent = row.timeSpentSeconds;
         const productivityScore = row.productivity;
         if (!acc[productivityScore]) {
@@ -15,7 +18,7 @@ function aggregateByProductivityScore(rows: Row[]): { [score: number]: number } 
     }, {} as { [score: number]: number });
 }
 
-export async function renderDoughnutChart(rows: any[]) {
+export async function renderDoughnutChart(rows: any[], ctx: CanvasRenderingContext2D) {
 
     if (document.body.classList.contains("theme-dark")) {
         Chart.defaults.borderColor = "#FFFFFF";
@@ -25,7 +28,7 @@ export async function renderDoughnutChart(rows: any[]) {
         Chart.defaults.color = "#000000";
     }
 
-    const ctx = (document.querySelector('.doughnutChart') as HTMLCanvasElement).getContext('2d');
+
     const aggregatedData = aggregateByProductivityScore(rows);
     const labels = Object.keys(aggregatedData).map(label => parseInt(label)).sort((a, b) => a - b);
     const data = labels.map(label => aggregatedData[label]);
@@ -46,7 +49,7 @@ export async function renderDoughnutChart(rows: any[]) {
                 cutout: "60%",
                 plugins: {
                     legend: {
-                        position: 'top',
+                        display: false
                     },
                     title: {
                         display: false,

@@ -1,4 +1,13 @@
-const expectedHeaders = [
+const activityHeaders = [
+    "Date",
+    "Time Spent (seconds)",
+    "Number of People",
+    "Activity",
+    "Category",
+    "Productivity"
+];
+
+const overviewHeaders = [
     "Date",
     "Time Spent (seconds)",
     "Number of People",
@@ -11,9 +20,9 @@ export interface Row {
     date: Date;
     timeSpentSeconds: number;
     numberOfPeople: number;
-    activity: string;
-    category: string;
-    productivity: number;
+    activity?: string;
+    category?: string;
+    productivity?: number;
 }
 
 export interface DataReturnType {
@@ -22,3 +31,4 @@ export interface DataReturnType {
     rows: any[][];
     convertedRows?: Row[];
 }
+

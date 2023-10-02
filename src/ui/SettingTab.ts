@@ -1,5 +1,5 @@
 import type RescueTimePlugin from "main";
-import { App, ButtonComponent, DropdownComponent, ExtraButtonComponent, Notice, PluginSettingTab, Setting} from "obsidian";
+import { App, ButtonComponent, Notice, PluginSettingTab, Setting} from "obsidian";
 
 export class SettingTab extends PluginSettingTab {
 	plugin: RescueTimePlugin;

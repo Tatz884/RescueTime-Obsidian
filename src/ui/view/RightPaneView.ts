@@ -1,19 +1,19 @@
 import { ItemView, WorkspaceLeaf } from "obsidian";
-import { renderHourlyBarChart } from '../component/HourlyBarChart'
 import { getProductivityPulse, calculateProductivityPulse, calculateProductivityPulsesBy5MinInterval } from "../component/ProductivityPulse";
-import { DataReturnType, Row } from "src/model/FetchedData";
 import { renderDoughnutChart } from "../component/DoughnutChart";
 import { renderCategoryBarChart } from "../component/CategoryBarChart";
-import { ApiStatus, FetchedDataAndHeaders, Period, ResolutionTime } from "../../model/DataStore";
-import { setFetchedData, getFetchedDataByPeriodAndResolution } from "../../store/DataStore";
+import { ResolutionTime, RestrictKind } from "../../model/DataStore";
 import { today } from "../../util/TimeHelpers";
 import RescueTimePlugin from "../../../main"
-import { analyze } from "eslint-scope";
 import { renderProductivityPulseChart } from "../component/ProductivityPulseChart";
+import { isFetchedDataAndHeaders, isApiStatus } from "../../util/TypeGuards";
+import { renderIntervalBarChart } from "../component/IntervalBarChart";
+import { Interval } from "../../model/ChartSetting";
+import { DataService } from "../../api/DataService";
 
-export const RIGHT_PANE_VIEW = "right-pane-view";
+export const RESCUE_TIME_RIGHT_PANE_VIEW = "rescue-time-right-pane-view";
 
-export class RightPaneView extends ItemView {
+export class RescueTimeRightPaneView extends ItemView {
   private _plugin: RescueTimePlugin;
 
   constructor(leaf: WorkspaceLeaf, plugin: RescueTimePlugin) {
@@ -22,7 +22,7 @@ export class RightPaneView extends ItemView {
   }
 
   getViewType() {
-    return RIGHT_PANE_VIEW;
+    return RESCUE_TIME_RIGHT_PANE_VIEW;
   }
 
   getDisplayText() {
@@ -30,16 +30,11 @@ export class RightPaneView extends ItemView {
   }
 
   async onOpen() {
-
-
     const container = this.containerEl.children[1];
     container.setAttribute('style', 'backgroundColor: black;');
     container.empty();
     container.createEl("h4", { text: "RescueTime dashboard" });
     const reloadButton = container.createEl("button", { text: "reload", cls: "reloadButton" });
-
-    
-
 
     const wrapper = container.createEl("div", { cls: "wrapper"});
     const status = wrapper.createEl("div", { cls: "status"});
@@ -50,7 +45,7 @@ export class RightPaneView extends ItemView {
     const doughnutChart = doughnutContainer.createEl("canvas", { cls: "doughnutChart" });
     const barHourlyTitle = wrapper.createEl("div", { text: "Hourly productivity", cls: "barHourlyTitle" });
     const barHourlyChart = wrapper.createEl("canvas", { cls: "barHourlyChart" });
-    const barCategoryTitle = wrapper.createEl("div", { text: "Category vs Time Spent", cls: "barCategoryTitle" });
+    const barCategoryTitle = wrapper.createEl("div", { text: "Category vs time spent", cls: "barCategoryTitle" });
     const barCategoryChart = wrapper.createEl("canvas", { cls: "barCategoryChart" });
     
     let productivityPulseChart: any
@@ -58,36 +53,23 @@ export class RightPaneView extends ItemView {
     let doughnutChartContent: any
     let barCategoryChartContent: any
 
+    const dataService = new DataService(this._plugin);
     
 
-    function isFetchedDataAndHeaders(variable: any): variable is FetchedDataAndHeaders {
-      return variable && 
-            typeof variable === 'object' && 
-            'headers' in variable && 
-            'data' in variable;
-    }
 
-    function isApiStatus(value: any): value is ApiStatus {
-      return Object.values(ApiStatus).includes(value);
-    }
 
     const renderCurrentDashboard = async () => {
-      this._plugin.response = await this._plugin.api.fetchData({apiToken: this._plugin.settings.apiToken, period: {start: today, end: today}, resolutionTime: ResolutionTime.MINUTE})
-
+      
       if (productivityPulseChart) {
         await productivityPulseChart.clear();
         await productivityPulseChart.destroy();
       }
 
-      if (!this._plugin.response) {
-        throw new Error("Failed to fetch data today.");
-      }
-      await setFetchedData(this._plugin.response);
 
-      const dataAndHeaders = await getFetchedDataByPeriodAndResolution(
-        {start: today, end: today},
-        ResolutionTime.MINUTE
-      )
+
+      let dataAndHeaders = await dataService.fetchAndProcessData({start: today, end: today},
+        ResolutionTime.MINUTE,
+        RestrictKind.PRODUCTIVITY);
 
       if (isFetchedDataAndHeaders(dataAndHeaders) && dataAndHeaders.data && dataAndHeaders.data.convertedRows) {        
         productivityPulseChart = await renderProductivityPulseChart(dataAndHeaders.data.convertedRows)
@@ -98,8 +80,6 @@ export class RightPaneView extends ItemView {
     }
 
     const renderDailyDashboard = async () => {
-      this._plugin.response = await this._plugin.api.fetchData({apiToken: this._plugin.settings.apiToken})
-
       if (doughnutChartContent) {
         await doughnutChartContent.clear();
         await doughnutChartContent.destroy();
@@ -113,26 +93,34 @@ export class RightPaneView extends ItemView {
         await barCategoryChartContent.destroy();
       }
 
-      if (!this._plugin.response) {
-        throw new Error("Failed to fetch data today.");
-      }
-      await setFetchedData(this._plugin.response);
-
-      const dataAndHeaders = await getFetchedDataByPeriodAndResolution(
-        {start: today, end: today},
-        ResolutionTime.HOUR
-      )
+      let dataAndHeaders = await dataService.fetchAndProcessData({start: today, end: today},
+        ResolutionTime.HOUR,
+        RestrictKind.ACTIVITY)
 
       if (isFetchedDataAndHeaders(dataAndHeaders) && dataAndHeaders.data && dataAndHeaders.data.convertedRows) {
         
-        await status.setText("Time-Course Change of Today's Pulse")
-        const {productivityPulse, } = calculateProductivityPulse(dataAndHeaders.data.convertedRows)
+        await status.setText("Time-course change of today's pulse")
+        const {productivityPulse, } = await calculateProductivityPulse(dataAndHeaders.data.convertedRows)
         const productivityPulseDisplay = String(Math.round(productivityPulse))
-        this._plugin.statusBarItemEl.setText(`Today's Productivity Pulse: ${productivityPulseDisplay}`)
-        hourlyBarChartContent = await renderHourlyBarChart(dataAndHeaders.data.convertedRows)
-        doughnutChartContent = await renderDoughnutChart(dataAndHeaders.data.convertedRows)
+        this._plugin.statusBarItemEl.setText(`Today's productivity pulse: ${productivityPulseDisplay}`)
+
+        // get .barHourlyChart from the container of the rightpaneview, rather from document
+        const barHourlyChartCtx = await container.querySelector('.barHourlyChart') as HTMLCanvasElement | null;
+        if (!barHourlyChartCtx) {
+            console.error("Unable to get canvas element");
+            return;
+        }
+        const doughnutChartCtx = (container.querySelector('.doughnutChart') as HTMLCanvasElement).getContext('2d');
+        if (!doughnutChartCtx) {
+            console.error("Unable to get canvas element");
+            return;
+        }
+        const displayScore = container.querySelector('.score');
+
+        hourlyBarChartContent = await renderIntervalBarChart(dataAndHeaders.data.convertedRows, Interval.HOURLY, barHourlyChartCtx)
+        doughnutChartContent = await renderDoughnutChart(dataAndHeaders.data.convertedRows, doughnutChartCtx)
         barCategoryChartContent = await renderCategoryBarChart(dataAndHeaders.data.convertedRows, 7, true)
-        await getProductivityPulse(dataAndHeaders.data.convertedRows)
+        await getProductivityPulse(dataAndHeaders.data.convertedRows, displayScore)
       } else if (isApiStatus(dataAndHeaders)) {
         await status.setText(`${dataAndHeaders}`)
       }
@@ -150,6 +138,7 @@ export class RightPaneView extends ItemView {
   }
 
   async onClose() {
+    
 
 
   }

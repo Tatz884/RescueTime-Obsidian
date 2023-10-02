@@ -5,7 +5,7 @@ import 'chartjs-adapter-date-fns';
 import { enUS } from 'date-fns/locale';
 Chart.register(LineController, LineElement, PointElement, LinearScale, Title, TimeScale );
 
-function extractChartData(pulsesByInterval: Map<string, number | null>) {
+async function extractChartData(pulsesByInterval: Map<string, number | null>) {
     return {
         labels: Array.from(pulsesByInterval.keys()),
         data: Array.from(pulsesByInterval.values())
@@ -105,6 +105,9 @@ function createProductivityChart(ctx: CanvasRenderingContext2D, labels: string[]
                 }
             },
             plugins: {
+                legend: {
+                    display: false
+                },
                 tooltip: {
                     callbacks: {
                         labelColor: function(tooltipItem) {
@@ -136,7 +139,7 @@ export async function renderProductivityPulseChart(rows: Row[]) {
 
 
     const pulsesByInterval = calculateProductivityPulsesBy5MinInterval(rows);
-    const { labels, data } = extractChartData(pulsesByInterval);
+    const { labels, data } = await extractChartData(await pulsesByInterval);
 
     const ctx = (document.querySelector('.productivityChart') as HTMLCanvasElement).getContext('2d');
 

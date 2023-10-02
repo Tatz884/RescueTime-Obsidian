@@ -4,11 +4,14 @@ import { QueryError, InternetError, OtherError} from "../model/ApiErrors"
 import { Row, DataReturnType } from '../model/FetchedData';
 import { Period, ResolutionTime, ApiStatus, FetchedDataAndHeaders } from '../model/DataStore';
 import { today } from "../util/TimeHelpers";
+import { isDataReturnType, isQueryError, isInternetError, isOtherError } from "../util/TypeGuards";
+import { RestrictKind } from "../model/DataStore";
 
 interface FetchDataParam {
     apiToken: string
-    period?: Period
-    resolutionTime?: ResolutionTime
+    period: Period
+    resolutionTime: ResolutionTime
+    restrict_kind: RestrictKind
 }
 
 export class AnalyticDataAPI {
@@ -20,110 +23,94 @@ export class AnalyticDataAPI {
         this.time = new Date();
     }
 
-    private setURL(apiToken: string, period: Period = {start: today, end: today}, resolutionTime: ResolutionTime = ResolutionTime.HOUR): string {
-
-        const url = `https://www.rescuetime.com/anapi/data?key=${apiToken}&perspective=interval&interval=${resolutionTime}&restrict_begin=${period.start}&restrict_end=${period.end}&format=json`;
+    private setURL({
+        apiToken,
+        period = { start: today, end: today },
+        resolutionTime = ResolutionTime.HOUR,
+        restrict_kind = RestrictKind.ACTIVITY,
+      }: FetchDataParam): string {
+        const url = `https://www.rescuetime.com/anapi/data?key=${apiToken}&perspective=interval&interval=${resolutionTime}&restrict_begin=${period.start}&restrict_end=${period.end}&restrict_kind=${restrict_kind}&format=json`;
         return url;
-    }
+      }
+
+      private async fetchDataInternal(params: FetchDataParam): Promise<FetchedDataAndHeaders | void> {
+        const url: string = this.setURL(params);
+        const result = await fetchDataFromRT(url);
+
+        let period: Period = { start: today, end: today }; // Default values
+        let resolutionTime: ResolutionTime = ResolutionTime.HOUR; // Default value
+        let restrict_kind: RestrictKind = RestrictKind.ACTIVITY
+      
+        let apiStatus: ApiStatus;
+        const commonHeaders = {
+          period: params.period,
+          resolutionTime: params.resolutionTime,
+          restrict_kind: params.restrict_kind,
+        };
+      
+        if (isDataReturnType(result)) {
+          if (!validateHeaders(result.row_headers, params.restrict_kind)) {
+            apiStatus = ApiStatus.UNEXPECTED_DATATYPE;
+          } else if (result.rows.length === 0) {
+            apiStatus = ApiStatus.EMPTY_DATA;
+          } else {
+            result.convertedRows = convertToRows(result.rows, params.restrict_kind);
+            apiStatus = ApiStatus.AVAILABLE;
+          }
+      
+          return {
+            headers: { ...commonHeaders, apiStatus },
+            data: result,
+          };
+        }
+      
+        // Setting appropriate error status
+        if (isQueryError(result)) apiStatus = ApiStatus.INVALID_PARAM;
+        else if (isInternetError(result)) apiStatus = ApiStatus.UNREACHABLE;
+        else apiStatus = ApiStatus.UNKNOWN;
+      
+        // Returning error information with headers only
+        return {
+          headers: { ...commonHeaders, apiStatus },
+          data: null, // Or a default DataReturnType value if it exists
+        };
+      }
 
     // Overloaded function signatures
     public async fetchData(apiToken: string): Promise<FetchedDataAndHeaders | void>;
     public async fetchData(params: FetchDataParam): Promise<FetchedDataAndHeaders | void>;
 
     public async fetchData(apiTokenOrParams: string | FetchDataParam): Promise<FetchedDataAndHeaders | void> {
-        let apiToken: string;
-        let period: Period = { start: today, end: today }; // Default values
-        let resolutionTime: ResolutionTime = ResolutionTime.HOUR; // Default value
+
+        let params: FetchDataParam;
+
+        if (typeof apiTokenOrParams === "string") {
+            params = {
+              apiToken: apiTokenOrParams,
+              period: { start: today, end: today }, // Default values
+              resolutionTime: ResolutionTime.HOUR, // Default value
+              restrict_kind: RestrictKind.ACTIVITY,
+            };
+          } else {
+            params = {
+              apiToken: apiTokenOrParams.apiToken,
+              period: apiTokenOrParams.period || { start: today, end: today },
+              resolutionTime: apiTokenOrParams.resolutionTime || ResolutionTime.HOUR,
+              restrict_kind: apiTokenOrParams.restrict_kind || RestrictKind.ACTIVITY,
+            };
+          }
     
-        if (typeof apiTokenOrParams === 'string') {
-            apiToken = apiTokenOrParams;
-        } else {
-            apiToken = apiTokenOrParams.apiToken;
-            period = apiTokenOrParams.period || period; // Use provided period or default
-            resolutionTime = apiTokenOrParams.resolutionTime || resolutionTime; // Use provided resolutionTime or default
-        }
-    
-        const url: string = this.setURL(apiToken, period, resolutionTime);
-        const result = await fetchDataFromRT(url);
+
+
+        return this.fetchDataInternal(params);
+
         
-        let apiStatus: ApiStatus;
     
-        if (this.isDataReturnType(result)) {
-            if (!validateHeaders(result.row_headers)) {
-                apiStatus = ApiStatus.UNEXPECTED_DATATYPE;
-                return {
-                    headers: {
-                        period: period,
-                        resolutionTime: resolutionTime,
-                        apiStatus: apiStatus
-                    },
-                    data: result
-                };
-            } else if (result.rows.length === 0) {
-                apiStatus = ApiStatus.EMPTY_DATA;
-                return {
-                    headers: {
-                        period: period,
-                        resolutionTime: resolutionTime,
-                        apiStatus: apiStatus
-                    },
-                    data: result
-                };
-            } else {
-                // Convert raw rows to Row[]
-                result.convertedRows = convertToRows(result.rows);
-                apiStatus = ApiStatus.AVAILABLE;
-                return {
-                    headers: {
-                        period: period,
-                        resolutionTime: resolutionTime,
-                        apiStatus: apiStatus
-                    },
-                    data: result
-                };
-            }
-        }
-    
-        // Handle error cases 
-        if (this.isQueryError(result)) {
-            apiStatus = ApiStatus.INVALID_PARAM;
-        } else if (this.isInternetError(result)) {
-            apiStatus = ApiStatus.UNREACHABLE;
-        } else if (this.isOtherError(result)) {
-            console.log("isotherresult")
-            apiStatus = ApiStatus.UNKNOWN;
-        } else {
-            apiStatus = ApiStatus.UNKNOWN;
-        }
-    
-        // Return error information with headers only
-        return {
-            headers: {
-                period: period,
-                resolutionTime: resolutionTime,
-                apiStatus: apiStatus
-            },
-            data: null // Or a default DataReturnType value if it exists
-        };
+
     }
 
 
-    // test connection + error handling
-    isQueryError(object: any): object is QueryError {
-        return 'type' in object && object.type === 'QueryError';
-    }
 
-    isDataReturnType(object: any): object is DataReturnType {
-        return 'notes' in object && 'row_headers' in object && 'rows' in object;
-    }
-
-    isInternetError(object: any): object is InternetError {
-        return 'type' in object && object.type === 'InternetError';
-    }
-    
-    isOtherError(object: any): object is OtherError {
-        return 'type' in object && object.type === 'OtherError';
-    }
 
     private handleQueryError(result: QueryError): never {
         throw new Error("API request failed. Check your API key." + result.message);
@@ -138,17 +125,19 @@ export class AnalyticDataAPI {
     }
 
     
-    public async testConnection(apiToken: string, period: Period = {start: "2023-08-23", end: "2023-08-23"}, resolutionTime: ResolutionTime = ResolutionTime.HOUR): Promise<void|Error> {
+    public async testConnection(apiToken: string, period: Period = {start: today, end: today},
+        resolutionTime: ResolutionTime = ResolutionTime.HOUR,
+        restrict_kind: RestrictKind = RestrictKind.ACTIVITY): Promise<void|Error> {
         try {
-            const url: string = this.setURL(apiToken, period, resolutionTime);
+            const url: string = this.setURL({apiToken, period, resolutionTime, restrict_kind});
             const result = await fetchDataFromRT(url);
     
-            if (this.isDataReturnType(result)) {
-            } else if (this.isQueryError(result)) {
+            if (isDataReturnType(result)) {
+            } else if (isQueryError(result)) {
                 this.handleQueryError(result) 
-            } else if (this.isInternetError(result)) {
+            } else if (isInternetError(result)) {
                 this.handleInternetError(result);
-            } else if (this.isOtherError(result)) {
+            } else if (isOtherError(result)) {
                 this.handleOtherError(result);
             } else {
                 throw new Error("Unknown error. Kindly notify the developer if you see this. Returned data: " + JSON.stringify(result));
@@ -158,4 +147,8 @@ export class AnalyticDataAPI {
             return error.message;
         }
     }
+    
+
+    
+    
 }

@@ -10,6 +10,19 @@
     --text-color: #FFFFFF;
 }
 
+/* Code blocker wrapper */
+
+.codeBlockWrapper {
+    display: grid;
+    grid-template:
+        "barDailyTitle doughnutTitle" 30px
+        "barDailyChart doughnutContainer" auto / minmax(auto, 350px) minmax(auto, 300px);
+    overflow: hidden;
+    font: white;
+}
+
+
+/* ----- right pane ----- */
 
 .wrapper {
     display: grid;
@@ -28,6 +41,26 @@
     font: white;
     padding-bottom: 200px;
 }
+
+
+/* parts for daily chart */
+
+.barDailyTitle {
+    grid-area: barDailyTitle;
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+.barDailyChart {
+    grid-area: barDailyChart;
+    width: 100%;
+    max-width: 284px;
+    height: 100%;
+    max-height: 200px;
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+/* parts for the right pane view */
 
 .status {
     grid-area: status;
@@ -51,8 +84,6 @@
 }
 
 .doughnutTitle {
-    align-self: self-end;
-    padding-bottom: 10px;
     grid-area: doughnutTitle;
     font-size: 15px;
     border-color: var(--border-color);
@@ -129,4 +160,17 @@
     border-color: var(--border-color);
     color: var(--text-color);
 
+}
+
+
+/* responsive design */
+
+/* CSS for phone size */
+.codeBlockWrapper.small {
+        display: grid;
+        grid-template:
+            "barDailyTitle" 30px
+            "barDailyChart" auto
+            "doughnutTitle" 30px
+            "doughnutContainer" 150px / minmax(150px, auto);
 }

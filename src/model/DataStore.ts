@@ -14,6 +14,12 @@ export enum ResolutionTime {
     MINUTE = "minute" // means 5-minute interval, based on RT API specification
 }
 
+export enum RestrictKind {
+    OVERVIEW = "overview", // major categories
+    ACTIVITY = "activity", // sub-categories and individual activities (i.e. websites, apps)
+    PRODUCTIVITY = "productivity"
+}
+
 export enum ApiStatus {
     AVAILABLE = "Data is successfully retrieved from API.",
     EMPTY_DATA = "Data is retrieved but empty. Wait until data is logged and sent from your RescueTime client.",
@@ -28,7 +34,8 @@ export enum ApiStatus {
 export interface DataHeaders {
         period: Period,
         resolutionTime: ResolutionTime,
-        apiStatus: ApiStatus
+        restrict_kind: RestrictKind,
+        apiStatus: ApiStatus,
 }
 
 export interface FetchedDataAndHeaders {
