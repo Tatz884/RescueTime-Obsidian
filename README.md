@@ -1,7 +1,7 @@
 # RescueTime Obsidian Plugin
 
 View your activity logs from RescueTime in Obsidian.
-![OverView](./assets/OverView.png)
+![OverView](./assets/Overview.png)
 ![LiveDemo](./assets/LiveDemo.gif)
 ## Installation
 
