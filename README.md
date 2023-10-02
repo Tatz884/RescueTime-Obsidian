@@ -1,8 +1,10 @@
 # RescueTime Obsidian Plugin
 
 View your activity logs from RescueTime in Obsidian.
-![OverView](./assets/Overview.png)
-![LiveDemo](./assets/LiveDemo.gif)
+<img src="./assets/Overview.png" width="300px" alt="Overview Image" />
+
+<img src="./assets/LiveDemo.gif" width="300px" alt="Live Demo GIF" />
+
 ## Installation
 
 ### Prerequisite
@@ -10,24 +12,25 @@ View your activity logs from RescueTime in Obsidian.
 - Obsidian Desktop Client > v 0.13.0 [Install here](https://obsidian.md/)
 > [!NOTE]
 > This plugin is compatible only with Obsidian desktop clients, but not with mobile.
+
 ### Install RescueTime Obsidian Plugin
 
-![Installation](./assets/Installation.png)
+<img src="./assets/Installation.png" width="300px" alt="Installation Image" />
 
 1. Open the setting tab at the bottom left of your Obsidian client.
-2. In "Option", lick "Community Plugins" .
+2. In "Option", click "Community Plugins".
 3. Click "Browse", then search for "RescueTime", and install it.
-4. Enable "RescueTime" plugin. 
+4. Enable "RescueTime" plugin.
 
 To display the data from RescueTime in Obsidian, you need to set API token in the plugin setting - see below.
+
 ### Set API token
 
+<img src="./assets/ObtainAPIkeyFromRT.png" width="300px" alt="Obtain API key from Rescue Time Image" />
 
-![Obtain API key from Rescue Time](./assets/ObtainAPIkeyFromRT.png)
+1. Get API token from [API management page of RescueTime](https://www.rescuetime.com/anapi/manage). Go to "Create a new API key" with a reference label that you can type anything (say, "obsidian integration"). You don't have to change "Allow queries from:". Click "Activate this key" and copy the key.
 
-1. Get API token from [API management page of RescueTime](https://www.rescuetime.com/anapi/manage). Go to "Create a new API key" with a reference label that you can type anything (say, "obsidian integration"). You don't have to change "Allow queries from: ". Click "Activate this key" and copy the key.
-   
-![Set API token in the plugin setting](./assets/SetAPItoken.png)
+<img src="./assets/SetAPItoken.png" width="300px" alt="Set API token in the plugin setting Image" />
 
 2. In the setting tab, now "Community plugins" has 'RescueTime'. Paste the copied key in "API token".
 3. To test API connection, click "connect" in "API connection test".
@@ -36,18 +39,19 @@ That's it! Now you should be able to view the data from RescueTime.
 
 ## View RescueTime dashboard for today
 
-![Right Pane](./assets/RightPane.png)
+<img src="./assets/RightPane.png" width="300px" alt="Right Pane Image" />
 
 Click "Expand" icon at the top right corner to expand the right pane and find the RescueTime icon.
 All graphs are based on the data today.
 > [!NOTE]
-> Your RescueTime clients sends data to the RescueTime server every 30 minutes for free users, and 3 minutes for pro users. Thus, you will get the data update with these intervals.
+> Your RescueTime clients send data to the RescueTime server every 30 minutes for free users, and 3 minutes for pro users. Thus, you will get the data update with these intervals.
 
 ## View RescueTime data for the time period specified by you
 
-![CodeBlock](./assets/CodeBlock.png)
-![CodeBlockProcessed](./assets/CodeBlockProcessed.png)
-If you type the codeblock with the following format, then it will turn into the graphs showing the data over the period defined by you.
+<img src="./assets/CodeBlock.png" width="300px" alt="Code Block Image" />
+<img src="./assets/CodeBlockProcessed.png" width="300px" alt="Code Block Processed Image" />
+
+If you type the code block with the following format, then it will turn into the graphs showing the data over the period defined by you.
 ```rescuetime
 FROM YYYY-MM-DD TO YYYY-MM-DD
 ```
