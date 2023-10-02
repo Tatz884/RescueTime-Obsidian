@@ -14,14 +14,28 @@ View your activity logs from RescueTime in Obsidian.
 > [!NOTE]
 > This plugin is compatible only with Obsidian desktop clients, but not with mobile.
 
-### Install RescueTime Obsidian Plugin
+### Download RescueTime Obsidian Plugin
+
+You can download manually only as of 2023/10/02, since this plugin is not approved by Obsidian Team yet.
+
+#### Download manually
+
+
+1. Download `rescuetime-<latest-version>.zip` from [the latest release](https://github.com/Tatz884/RescueTime-Obsidian/releases/latest/)
+2. Unpack the zip in `<vault>/.obsidian/plugins/rescuetime`
+3. Reload Obsidian (CTRL + R)
+4. Disable safe mode.
+5. Enable `RescueTime` plugin.
+
+
+#### Download from community plugin list (NOT available yet)
 
 <img src="./assets/Installation.png" alt="Installation Image" />
 
 1. Open the setting tab at the bottom left of your Obsidian client.
 2. In "Option", click "Community Plugins".
 3. Click "Browse", then search for "RescueTime", and install it.
-4. Enable "RescueTime" plugin.
+4. Disable safe mode, and enable "RescueTime" plugin.
 
 To display the data from RescueTime in Obsidian, you need to set API token in the plugin setting - see below.
 
