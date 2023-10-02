@@ -49,8 +49,8 @@ All graphs are based on the data today.
 
 ## View RescueTime data for the time period specified by you
 
-<img src="./assets/CodeBlock.png" width="300px" alt="Code Block Image" />
-<img src="./assets/CodeBlockProcessed.png" width="300px" alt="Code Block Processed Image" />
+<img src="./assets/CodeBlock.png" width="600px" alt="Code Block Image" />
+<img src="./assets/CodeBlockProcessed.png" width="600px" alt="Code Block Processed Image" />
 
 If you type the code block with the following format, then it will turn into the graphs showing the data over the period defined by you.
 ```rescuetime
