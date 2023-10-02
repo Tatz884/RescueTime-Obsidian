@@ -53,8 +53,10 @@ All graphs are based on the data today.
 <img src="./assets/CodeBlockProcessed.png" width="600px" alt="Code Block Processed Image" />
 
 If you type the code block with the following format, then it will turn into the graphs showing the data over the period defined by you.
+`````markdown
 ```rescuetime
 FROM YYYY-MM-DD TO YYYY-MM-DD
 ```
+`````
 > [!NOTE]
 > Currently, this code block only supports the time periods spanning less than or equal to 31 days. Also you need to specify the time range starting 92 or less days before today. Querying the period 93 or more days ago will require RescueTime Pro subscription and the developer does not have subscription...
