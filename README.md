@@ -16,7 +16,7 @@ View your activity logs from RescueTime in Obsidian.
 
 ### Download RescueTime Obsidian Plugin
 
-You can download manually only as of 2023/10/02, since this plugin is not approved by Obsidian Team yet.
+You can download it only manually as of 2023/10/02, since this plugin is not approved by Obsidian Team yet.
 
 #### Download manually
 
@@ -73,4 +73,4 @@ FROM YYYY-MM-DD TO YYYY-MM-DD
 ```
 `````
 > [!NOTE]
-> Currently, this code block only supports the time periods spanning less than or equal to 31 days. Also you need to specify the time range starting 92 or less days before today. Querying the period 93 or more days ago will require RescueTime Pro subscription and the developer does not have subscription...
+> Currently, this code block only supports the time periods spanning 31 or less days. Also you need to specify the time range starting 92 or less days before today. Querying 93 or more days ago will require RescueTime Pro subscription and the developer does not have subscription...
