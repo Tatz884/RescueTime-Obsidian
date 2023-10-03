@@ -2,7 +2,7 @@
 
 View your activity logs from RescueTime in Obsidian.
 
-<img src="./assets/Overview.png" walt="Overview Image" />
+<img src="./assets/AppOverview.png" walt="Overview Image" />
 
 <img src="./assets/LiveDemo.gif" alt="Live Demo GIF" />
 
@@ -14,14 +14,28 @@ View your activity logs from RescueTime in Obsidian.
 > [!NOTE]
 > This plugin is compatible only with Obsidian desktop clients, but not with mobile.
 
-### Install RescueTime Obsidian Plugin
+### Download RescueTime Obsidian Plugin
+
+You can download it only manually as of 2023/10/02, since this plugin is not approved by Obsidian Team yet.
+
+#### Download manually
+
+
+1. Download `rescuetime-<latest-version>.zip` from [the latest release](https://github.com/Tatz884/RescueTime-Obsidian/releases/latest/)
+2. Unpack the zip in `<vault>/.obsidian/plugins/rescuetime`
+3. Reload Obsidian (CTRL + R)
+4. Disable the restricted mode.
+5. Enable `RescueTime` plugin.
+
+
+#### Download from community plugin list (NOT available yet)
 
 <img src="./assets/Installation.png" alt="Installation Image" />
 
 1. Open the setting tab at the bottom left of your Obsidian client.
 2. In "Option", click "Community Plugins".
 3. Click "Browse", then search for "RescueTime", and install it.
-4. Enable "RescueTime" plugin.
+4. Disable the restricted mode, and enable "RescueTime" plugin.
 
 To display the data from RescueTime in Obsidian, you need to set API token in the plugin setting - see below.
 
@@ -59,4 +73,4 @@ FROM YYYY-MM-DD TO YYYY-MM-DD
 ```
 `````
 > [!NOTE]
-> Currently, this code block only supports the time periods spanning less than or equal to 31 days. Also you need to specify the time range starting 92 or less days before today. Querying the period 93 or more days ago will require RescueTime Pro subscription and the developer does not have subscription...
+> Currently, this code block only supports the time periods spanning 31 or less days. Also you need to specify the time range starting 92 or less days before today. Querying 93 or more days ago will require RescueTime Pro subscription and the developer does not have subscription...
