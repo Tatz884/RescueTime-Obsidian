@@ -72,10 +72,14 @@ export default class RescueTimePlugin extends Plugin {
 		// this.app.workspace.detachLeavesOfType(RIGHT_PANE_VIEW);
 
 		// Adds the custom view on the right leaf
+		if (this.app.workspace.getLeavesOfType(RESCUE_TIME_RIGHT_PANE_VIEW).length) {
+			return;
+		}
 		await this.app.workspace.getRightLeaf(false).setViewState({
 		  type: RESCUE_TIME_RIGHT_PANE_VIEW,
 		  active: true,
 		});
+
 
 	  }
 }

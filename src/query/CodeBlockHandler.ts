@@ -134,7 +134,7 @@ export function handleResponsiveDesign(codeBlockWrapper: HTMLElement) {
       ro.observe(codeBlockWrapper);
       
       function checkWrapperSize(width: number) {
-        if (width <= 600) {
+        if (width <= 450) {
           codeBlockWrapper.classList.add('small');
         } else {
           codeBlockWrapper.classList.remove('small');

@@ -16,7 +16,7 @@
     display: grid;
     grid-template:
         "barDailyTitle doughnutTitle" 30px
-        "barDailyChart doughnutContainer" auto / minmax(auto, 350px) minmax(auto, 300px);
+        "barDailyChart doughnutContainer" auto / minmax(auto, 350px) 180px;
     overflow: hidden;
     font: white;
 }

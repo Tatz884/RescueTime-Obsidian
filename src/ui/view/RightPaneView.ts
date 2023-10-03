@@ -59,7 +59,7 @@ export class RescueTimeRightPaneView extends ItemView {
 
 
     const renderCurrentDashboard = async () => {
-      
+      console.log("is this running")
       if (productivityPulseChart) {
         await productivityPulseChart.clear();
         await productivityPulseChart.destroy();
@@ -71,8 +71,15 @@ export class RescueTimeRightPaneView extends ItemView {
         ResolutionTime.MINUTE,
         RestrictKind.PRODUCTIVITY);
 
-      if (isFetchedDataAndHeaders(dataAndHeaders) && dataAndHeaders.data && dataAndHeaders.data.convertedRows) {        
-        productivityPulseChart = await renderProductivityPulseChart(dataAndHeaders.data.convertedRows)
+      if (isFetchedDataAndHeaders(dataAndHeaders) && dataAndHeaders.data && dataAndHeaders.data.convertedRows) {  
+
+        const productivityChartCtx = (container.querySelector('.productivityChart') as HTMLCanvasElement).getContext('2d');
+        if (!productivityChartCtx) {
+            console.error("Unable to get canvas element");
+            return;
+        }
+
+        productivityPulseChart = await renderProductivityPulseChart(dataAndHeaders.data.convertedRows, productivityChartCtx)
       } else if (isApiStatus(dataAndHeaders)) {
         await status.setText(`${dataAndHeaders}`)
         doughnutTitle.setText(``)
@@ -115,11 +122,16 @@ export class RescueTimeRightPaneView extends ItemView {
             console.error("Unable to get canvas element");
             return;
         }
+        const barCategoryChartCtx = (container.querySelector('.barCategoryChart') as HTMLCanvasElement).getContext('2d');
+        if (!barCategoryChartCtx) {
+            console.error("Unable to get canvas element");
+            return;
+        }
         const displayScore = container.querySelector('.score');
 
         hourlyBarChartContent = await renderIntervalBarChart(dataAndHeaders.data.convertedRows, Interval.HOURLY, barHourlyChartCtx)
         doughnutChartContent = await renderDoughnutChart(dataAndHeaders.data.convertedRows, doughnutChartCtx)
-        barCategoryChartContent = await renderCategoryBarChart(dataAndHeaders.data.convertedRows, 7, true)
+        barCategoryChartContent = await renderCategoryBarChart(dataAndHeaders.data.convertedRows, 7, true, barCategoryChartCtx)
         await getProductivityPulse(dataAndHeaders.data.convertedRows, displayScore)
       } else if (isApiStatus(dataAndHeaders)) {
         await status.setText(`${dataAndHeaders}`)

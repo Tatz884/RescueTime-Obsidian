@@ -102,7 +102,7 @@ function processAndMapLabels(rawLabels: string[], processLabels: boolean): { pro
  * Note:
  * If you see the label is off, you want to manually modify labelOffset in xticks
  */
-export async function renderCategoryBarChart(rows: Row[], numCategories: number = 10, processLabels: boolean = true) {
+export async function renderCategoryBarChart(rows: Row[], numCategories: number = 10, processLabels: boolean = true, ctx: CanvasRenderingContext2D) {
     
     if (document.body.classList.contains("theme-dark")) {
         Chart.defaults.borderColor = "#FFFFFF";
@@ -113,8 +113,6 @@ export async function renderCategoryBarChart(rows: Row[], numCategories: number 
     }
     
     
-
-    const ctx = (document.querySelector('.barCategoryChart') as HTMLCanvasElement).getContext('2d');
     const { aggregatedData, categoryToProductivityScore } = aggregateByCategory(rows);
     const topAggregatedData = getTopNCategories(aggregatedData, numCategories);
     const totalTime = Object.values(aggregatedData).reduce((acc, curr) => acc + curr, 0);

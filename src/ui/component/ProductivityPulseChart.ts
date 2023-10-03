@@ -127,7 +127,7 @@ function createProductivityChart(ctx: CanvasRenderingContext2D, labels: string[]
 }
 
 
-export async function renderProductivityPulseChart(rows: Row[]) {
+export async function renderProductivityPulseChart(rows: Row[], ctx: CanvasRenderingContext2D) {
 
     if (document.body.classList.contains("theme-dark")) {
         Chart.defaults.borderColor = "#FFFFFF";
@@ -140,8 +140,6 @@ export async function renderProductivityPulseChart(rows: Row[]) {
 
     const pulsesByInterval = calculateProductivityPulsesBy5MinInterval(rows);
     const { labels, data } = await extractChartData(await pulsesByInterval);
-
-    const ctx = (document.querySelector('.productivityChart') as HTMLCanvasElement).getContext('2d');
 
     if (!ctx) throw new Error('Unable to get canvas rendering context.');
 
