@@ -28,19 +28,37 @@ export default class RescueTimePlugin extends Plugin {
 			RESCUE_TIME_RIGHT_PANE_VIEW,
 			(leaf) => new RescueTimeRightPaneView(leaf, this)
 		);
-		
-		this.statusBarItemEl.setText("Connecting to RescueTime...")
 
-		this.response = await this.api.fetchData(this.settings.apiToken)
-		if (!this.response) {
-			throw new Error("Failed to fetch data today.");
-		}
-		await setFetchedData(this.response);
-
-		if (this.response.headers.apiStatus && this.response.headers.apiStatus === ApiStatus.AVAILABLE && this.response.data?.convertedRows) {
-			const {productivityPulse, } = await calculateProductivityPulse(this.response.data.convertedRows)
-			const productivityPulseDisplay = String(Math.round(productivityPulse))
-			this.statusBarItemEl.setText(`Today's productivity pulse: ${productivityPulseDisplay}`)
+		// display the current score at the status bar
+		if (this.settings.apiToken) {
+			this.api.fetchData(this.settings.apiToken)
+				.then(response => {
+					this.response = response;
+					if (!this.response) {
+						console.log("Failed to fetch data today.");
+					} else {
+						return setFetchedData(this.response);
+					}
+				})
+				.then(() => {
+					if (this.response && this.response.headers.apiStatus === ApiStatus.AVAILABLE && this.response.data?.convertedRows) {
+						return calculateProductivityPulse(this.response.data.convertedRows);
+					}
+					return null;  // Return null or undefined if not processing further
+				})
+				.then(result => {
+					if (result) {
+						const {productivityPulse} = result;
+						if (productivityPulse !== undefined) {
+							const productivityPulseDisplay = String(Math.round(productivityPulse));
+							this.statusBarItemEl.setText(`Today's productivity pulse: ${productivityPulseDisplay}`);
+						}
+					}
+				})
+				.catch(error => {
+					// Handle any errors here
+					console.error('There was an error:', error);
+				});
 		}
 
 		this.app.workspace.onLayoutReady(() => {
@@ -67,10 +85,6 @@ export default class RescueTimePlugin extends Plugin {
 
 	async activateView() {
 
-		// !! Only for development
-		// Detaches all leaves with the custom view.
-		// this.app.workspace.detachLeavesOfType(RIGHT_PANE_VIEW);
-
 		// Adds the custom view on the right leaf
 		if (this.app.workspace.getLeavesOfType(RESCUE_TIME_RIGHT_PANE_VIEW).length) {
 			return;
@@ -79,7 +93,6 @@ export default class RescueTimePlugin extends Plugin {
 		  type: RESCUE_TIME_RIGHT_PANE_VIEW,
 		  active: true,
 		});
-
 
 	  }
 }
