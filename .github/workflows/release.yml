@@ -20,6 +20,7 @@ jobs:
       - name: Build plugin
         run: |
           npm install
+          npm install webpack-cli
           npm run build
 
       - name: Create release
