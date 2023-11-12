@@ -59,7 +59,7 @@ export class RescueTimeRightPaneView extends ItemView {
 
 
     const renderCurrentDashboard = async () => {
-      console.log("is this running")
+
       if (productivityPulseChart) {
         await productivityPulseChart.clear();
         await productivityPulseChart.destroy();

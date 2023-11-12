@@ -66,6 +66,9 @@ export default class RescueTimePlugin extends Plugin {
 		});
 
 		await this.registerMarkdownCodeBlockProcessor("rescuetime", async (source, el, ctx) => {
+			console.log("source:", source)
+			console.log("el:", el)
+			console.log("ctx:", ctx)
 				await codeBlockHandler(source, el, ctx, this)
 			}
 		)

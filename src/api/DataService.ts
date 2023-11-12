@@ -20,11 +20,13 @@ export class DataService {
 
         if (!response) throw new Error("Failed to fetch data.");
         
+
         await setFetchedData(response);
         return response;
     }
     
     public async fetchAndProcessData(period: Period, resolution: ResolutionTime, restrict_kind: RestrictKind, attempt = 1): Promise<FetchedDataAndHeaders | void> {
+        await this.fetchAndSetData(period, resolution, restrict_kind);
         let dataAndHeaders = await getFetchedDataByPeriodAndResolution(period, resolution, restrict_kind);
         
         if (!dataAndHeaders || isApiStatus(dataAndHeaders)) {
