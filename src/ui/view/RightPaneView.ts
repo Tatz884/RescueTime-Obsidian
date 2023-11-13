@@ -144,7 +144,7 @@ export class RescueTimeRightPaneView extends ItemView {
     }
 
     await renderAll()
-    this.registerInterval(window.setInterval(() => renderAll(), 3.000 * 60 * 1000));
+    this.registerInterval(window.setInterval(async () => await renderAll(), 3.000 * 60 * 1000));
 
     reloadButton.addEventListener("click", async () => await renderAll())
   }
