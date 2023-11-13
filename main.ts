@@ -29,6 +29,48 @@ export default class RescueTimePlugin extends Plugin {
 			(leaf) => new RescueTimeRightPaneView(leaf, this)
 		);
 
+		this.app.workspace.onLayoutReady(async () => {
+			await this.activateView();
+			await this.activateStatusBar()
+		});
+
+		await this.registerMarkdownCodeBlockProcessor("rescuetime", async (source, el, ctx) => {
+			console.log("source:", source)
+			console.log("el:", el)
+			console.log("ctx:", ctx)
+				await codeBlockHandler(source, el, ctx, this)
+			}
+		)
+
+		this.registerInterval(window.setInterval(async () => await this.activateStatusBar(), 3.000 * 60 * 1000));
+
+	}
+
+	onunload() {
+	}
+
+	async loadSettings() {
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+	}
+
+	async saveSettings() {
+		await this.saveData(this.settings);
+	}
+
+	async activateView() {
+
+		// Adds the custom view on the right leaf
+		if (this.app.workspace.getLeavesOfType(RESCUE_TIME_RIGHT_PANE_VIEW).length) {
+			return;
+		}
+		await this.app.workspace.getRightLeaf(false).setViewState({
+		  type: RESCUE_TIME_RIGHT_PANE_VIEW,
+		  active: true,
+		});
+
+	}
+
+	async activateStatusBar() {
 		// display the current score at the status bar
 		if (this.settings.apiToken) {
 			this.api.fetchData(this.settings.apiToken)
@@ -60,42 +102,5 @@ export default class RescueTimePlugin extends Plugin {
 					console.error('There was an error:', error);
 				});
 		}
-
-		this.app.workspace.onLayoutReady(() => {
-			this.activateView();
-		});
-
-		await this.registerMarkdownCodeBlockProcessor("rescuetime", async (source, el, ctx) => {
-			console.log("source:", source)
-			console.log("el:", el)
-			console.log("ctx:", ctx)
-				await codeBlockHandler(source, el, ctx, this)
-			}
-		)
-
 	}
-
-	onunload() {
-	}
-
-	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-	}
-
-	async saveSettings() {
-		await this.saveData(this.settings);
-	}
-
-	async activateView() {
-
-		// Adds the custom view on the right leaf
-		if (this.app.workspace.getLeavesOfType(RESCUE_TIME_RIGHT_PANE_VIEW).length) {
-			return;
-		}
-		await this.app.workspace.getRightLeaf(false).setViewState({
-		  type: RESCUE_TIME_RIGHT_PANE_VIEW,
-		  active: true,
-		});
-
-	  }
 }

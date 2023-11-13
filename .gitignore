@@ -23,3 +23,5 @@ data.json
 
 # Delete all packages by powershell script using depchecks
 DeleteAllUnusedPackages.ps1
+
+create_structure.sh

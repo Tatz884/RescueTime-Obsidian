@@ -23,16 +23,33 @@ export async function setFetchedData(fetchedItem: FetchedDataAndHeaders): Promis
         return;
     }
 
-    const existingApiStatus = fetchedDataArray[matchingIndex].headers.apiStatus;
 
-    // Firstly, if headers.apiStatus is not AVAILABLE, execute console.error with apiStatus
-    if (headers.apiStatus !== ApiStatus.AVAILABLE) {
-        console.error(headers.apiStatus);
-    }
+    const existingApiStatus = fetchedDataArray[matchingIndex].headers.apiStatus;
+    const existing_data_len = fetchedDataArray[matchingIndex].data?.rows.length
+
+        // // Firstly, if headers.apiStatus is not AVAILABLE, execute console.error with apiStatus
+        // if (headers.apiStatus !== ApiStatus.AVAILABLE) {
+        //     console.error(headers.apiStatus);
+        // } else 
 
     // Secondly, check for the position of the ApiStatus in the enum to determine the update logic
     if (Object.values(ApiStatus).indexOf(headers.apiStatus) <= Object.values(ApiStatus).indexOf(existingApiStatus)) {
-        fetchedDataArray[matchingIndex] = fetchedItem;
+        if (headers.apiStatus === ApiStatus.AVAILABLE){
+            if (existingApiStatus === ApiStatus.AVAILABLE) {
+                if (data !== null && data.rows) {
+                    
+                    // See if the obtained data is longer than the existing data,
+                    // else you don't need to update the data array and keep the existing data.
+                    if (existing_data_len && existing_data_len < data.rows.length) {
+                        fetchedDataArray[matchingIndex] = fetchedItem;
+                    }
+                }
+            } else {
+                fetchedDataArray[matchingIndex] = fetchedItem;
+            }
+        } else {
+            fetchedDataArray[matchingIndex] = fetchedItem;
+        }
     }
 }
 
