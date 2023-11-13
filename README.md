@@ -16,10 +16,9 @@ View your activity logs from RescueTime in Obsidian.
 
 ### Download RescueTime Obsidian Plugin
 
-You can download it only manually as of 2023/10/02, since this plugin is not approved by Obsidian Team yet.
+There are two options - 1. download manually, or 2. download from the community plugin list.
 
 #### Download manually
-
 
 1. Download `rescuetime-<latest-version>.zip` from [the latest release](https://github.com/Tatz884/RescueTime-Obsidian/releases/latest/)
 2. Unpack the zip in `<vault>/.obsidian/plugins/rescuetime`
@@ -28,7 +27,7 @@ You can download it only manually as of 2023/10/02, since this plugin is not app
 5. Enable `RescueTime` plugin.
 
 
-#### Download from community plugin list (NOT available yet)
+#### Download from the community plugin list
 
 <img src="./assets/Installation.png" alt="Installation Image" />
 
