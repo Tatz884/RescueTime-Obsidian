@@ -1,5 +1,6 @@
 import type RescueTimePlugin from "main";
 import { App, ButtonComponent, Notice, PluginSettingTab, Setting} from "obsidian";
+import { getToday } from "../util/TimeHelpers";
 
 export class SettingTab extends PluginSettingTab {
 	plugin: RescueTimePlugin;
@@ -40,8 +41,9 @@ export class SettingTab extends PluginSettingTab {
 
 	private async testConnection(button: ButtonComponent) {
 		button.setDisabled(true);
+        const today = getToday();
 		try {
-		  const error = await this.plugin.api.testConnection(this.plugin.settings.apiToken);
+		  const error = await this.plugin.api.testConnection(this.plugin.settings.apiToken, {start: today, end: today});
 		  if (error) {
 			throw error
 		  }

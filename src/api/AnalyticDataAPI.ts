@@ -2,8 +2,8 @@ import { fetchDataFromRT, validateHeaders, convertToRows } from "./FetchHelpers"
 import { PluginSettings } from "../config/PluginSettings"
 import { QueryError, InternetError, OtherError} from "../model/ApiErrors"
 import { Row, DataReturnType } from '../model/FetchedData';
+import { getToday } from "../util/TimeHelpers";
 import { Period, ResolutionTime, ApiStatus, FetchedDataAndHeaders } from '../model/DataStore';
-import { today } from "../util/TimeHelpers";
 import { isDataReturnType, isQueryError, isInternetError, isOtherError } from "../util/TypeGuards";
 import { RestrictKind } from "../model/DataStore";
 
@@ -19,13 +19,14 @@ export class AnalyticDataAPI {
     private data: Row[];
     private time: Date;
 
+
     constructor() {
         this.time = new Date();
     }
 
     private setURL({
         apiToken,
-        period = { start: today, end: today },
+        period,
         resolutionTime = ResolutionTime.HOUR,
         restrict_kind = RestrictKind.ACTIVITY,
       }: FetchDataParam): string {
@@ -36,6 +37,8 @@ export class AnalyticDataAPI {
       private async fetchDataInternal(params: FetchDataParam): Promise<FetchedDataAndHeaders | void> {
         const url: string = this.setURL(params);
         const result = await fetchDataFromRT(url);
+        let today = getToday();
+    
 
         let period: Period = { start: today, end: today }; // Default values
         let resolutionTime: ResolutionTime = ResolutionTime.HOUR; // Default value
@@ -83,6 +86,7 @@ export class AnalyticDataAPI {
     public async fetchData(apiTokenOrParams: string | FetchDataParam): Promise<FetchedDataAndHeaders | void> {
 
         let params: FetchDataParam;
+        let today = getToday();
 
         if (typeof apiTokenOrParams === "string") {
             params = {
@@ -125,7 +129,7 @@ export class AnalyticDataAPI {
     }
 
     
-    public async testConnection(apiToken: string, period: Period = {start: today, end: today},
+    public async testConnection(apiToken: string, period: Period,
         resolutionTime: ResolutionTime = ResolutionTime.HOUR,
         restrict_kind: RestrictKind = RestrictKind.ACTIVITY): Promise<void|Error> {
         try {

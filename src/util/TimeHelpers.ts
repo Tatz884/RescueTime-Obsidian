@@ -1,5 +1,10 @@
-const time = new Date();
-export const today = `${time.getFullYear()}-${time.getMonth() + 1}-${time.getDate()}`;
+export function getToday(): string {
+
+    const time = new Date();
+    const today = `${time.getFullYear()}-${time.getMonth() + 1}-${time.getDate()}`;
+    return today
+}
+
 
 export function secondsToMinutes(seconds: number): number {
     return seconds / 60;

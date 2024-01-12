@@ -34,10 +34,7 @@ export default class RescueTimePlugin extends Plugin {
 			await this.activateStatusBar()
 		});
 
-		await this.registerMarkdownCodeBlockProcessor("rescuetime", async (source, el, ctx) => {
-			console.log("source:", source)
-			console.log("el:", el)
-			console.log("ctx:", ctx)
+		this.registerMarkdownCodeBlockProcessor("rescuetime", async (source, el, ctx) => {
 				await codeBlockHandler(source, el, ctx, this)
 			}
 		)
@@ -67,8 +64,8 @@ export default class RescueTimePlugin extends Plugin {
 		  type: RESCUE_TIME_RIGHT_PANE_VIEW,
 		  active: true,
 		});
-
 	}
+
 
 	async activateStatusBar() {
 		// display the current score at the status bar

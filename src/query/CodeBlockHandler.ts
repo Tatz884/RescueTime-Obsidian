@@ -8,7 +8,7 @@ import RescueTimePlugin from "../../main";
 import { DataService } from "../api/DataService"; // Adjust the path as needed
 import { FetchedDataAndHeaders } from "../model/DataStore";
 import { isFetchedDataAndHeaders } from "../util/TypeGuards";
-
+import { isApiStatus } from "../util/TypeGuards";
 
 export async function codeBlockHandler(
     source: string,
@@ -18,7 +18,7 @@ export async function codeBlockHandler(
 ) {
 
     const codeBlockWrapper = el.createEl("div", {cls: "codeBlockWrapper"})
-    const errorMessage = validateDateInput(source);
+    const errorMessage = await validateDateInput(source);
     if (errorMessage) {
         const error = el.createEl("div", { text: errorMessage, cls: "errorMessage" });
         return;
@@ -36,11 +36,15 @@ export async function codeBlockHandler(
         renderCharts(codeBlockWrapper, dataAndHeaders)
         handleResponsiveDesign(codeBlockWrapper);
         loading.setText("") // This is not a best practice; Need to think a better way to delete "loading..."
-    }
+    }  else if (isApiStatus(dataAndHeaders)) {
+        const error = el.createEl("div", { text: `${dataAndHeaders}`, cls: "errorMessage" });
+      } else if (dataAndHeaders?.headers.apiStatus) {
+        const error = el.createEl("div", { text: `${dataAndHeaders?.headers.apiStatus}`, cls: "errorMessage" });
+      }
 }
 
 
-function validateDateInput(source: string): string | null {
+async function validateDateInput(source: string): Promise<string | null> {
         const regex = /^FROM (\d{4}-\d{2}-\d{2}) TO (\d{4}-\d{2}-\d{2})$/;
         const match = source.match(regex);
     

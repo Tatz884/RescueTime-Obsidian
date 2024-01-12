@@ -3,13 +3,13 @@ import { getProductivityPulse, calculateProductivityPulse, calculateProductivity
 import { renderDoughnutChart } from "../component/DoughnutChart";
 import { renderCategoryBarChart } from "../component/CategoryBarChart";
 import { ResolutionTime, RestrictKind } from "../../model/DataStore";
-import { today } from "../../util/TimeHelpers";
 import RescueTimePlugin from "../../../main"
 import { renderProductivityPulseChart } from "../component/ProductivityPulseChart";
 import { isFetchedDataAndHeaders, isApiStatus } from "../../util/TypeGuards";
 import { renderIntervalBarChart } from "../component/IntervalBarChart";
 import { Interval } from "../../model/ChartSetting";
 import { DataService } from "../../api/DataService";
+import { getToday } from "../../util/TimeHelpers";
 
 export const RESCUE_TIME_RIGHT_PANE_VIEW = "rescue-time-right-pane-view";
 
@@ -54,11 +54,8 @@ export class RescueTimeRightPaneView extends ItemView {
     let barCategoryChartContent: any
 
     const dataService = new DataService(this._plugin);
-    
 
-
-
-    const renderCurrentDashboard = async () => {
+    const renderCurrentDashboard = async (today: string) => {
 
       if (productivityPulseChart) {
         await productivityPulseChart.clear();
@@ -66,10 +63,13 @@ export class RescueTimeRightPaneView extends ItemView {
       }
 
 
+      
 
       let dataAndHeaders = await dataService.fetchAndProcessData({start: today, end: today},
         ResolutionTime.MINUTE,
         RestrictKind.PRODUCTIVITY);
+
+        console.log(dataAndHeaders)
 
       if (isFetchedDataAndHeaders(dataAndHeaders) && dataAndHeaders.data && dataAndHeaders.data.convertedRows) {  
 
@@ -83,10 +83,13 @@ export class RescueTimeRightPaneView extends ItemView {
       } else if (isApiStatus(dataAndHeaders)) {
         await status.setText(`${dataAndHeaders}`)
         doughnutTitle.setText(``)
+      }  else if (dataAndHeaders?.headers.apiStatus) {
+        await status.setText(`${dataAndHeaders.headers.apiStatus}`)
+        doughnutTitle.setText(``)
       }
     }
 
-    const renderDailyDashboard = async () => {
+    const renderDailyDashboard = async (today: string) => {
       if (doughnutChartContent) {
         await doughnutChartContent.clear();
         await doughnutChartContent.destroy();
@@ -135,12 +138,17 @@ export class RescueTimeRightPaneView extends ItemView {
         await getProductivityPulse(dataAndHeaders.data.convertedRows, displayScore)
       } else if (isApiStatus(dataAndHeaders)) {
         await status.setText(`${dataAndHeaders}`)
+      } else if (dataAndHeaders?.headers.apiStatus) {
+        await status.setText(`${dataAndHeaders.headers.apiStatus}`)
       }
     }
 
     const renderAll = async () => {
-      await renderCurrentDashboard()
-      await renderDailyDashboard()
+
+      let today = getToday();
+
+      await renderCurrentDashboard(today)
+      await renderDailyDashboard(today)
     }
 
     await renderAll()
