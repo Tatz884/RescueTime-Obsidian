@@ -2,7 +2,7 @@ import { ItemView, WorkspaceLeaf } from "obsidian";
 import { getProductivityPulse, calculateProductivityPulse, calculateProductivityPulsesBy5MinInterval } from "../component/ProductivityPulse";
 import { renderDoughnutChart } from "../component/DoughnutChart";
 import { renderCategoryBarChart } from "../component/CategoryBarChart";
-import { ResolutionTime, RestrictKind } from "../../model/DataStore";
+import { ApiStatus, ResolutionTime, RestrictKind } from "../../model/DataStore";
 import RescueTimePlugin from "../../../main"
 import { renderProductivityPulseChart } from "../component/ProductivityPulseChart";
 import { isFetchedDataAndHeaders, isApiStatus } from "../../util/TypeGuards";
@@ -71,7 +71,8 @@ export class RescueTimeRightPaneView extends ItemView {
 
         console.log(dataAndHeaders)
 
-      if (isFetchedDataAndHeaders(dataAndHeaders) && dataAndHeaders.data && dataAndHeaders.data.convertedRows) {  
+      if (isFetchedDataAndHeaders(dataAndHeaders) && dataAndHeaders.data && dataAndHeaders.data.convertedRows &&
+      dataAndHeaders.headers.apiStatus == ApiStatus.AVAILABLE) {  
 
         const productivityChartCtx = (container.querySelector('.productivityChart') as HTMLCanvasElement).getContext('2d');
         if (!productivityChartCtx) {
@@ -107,7 +108,8 @@ export class RescueTimeRightPaneView extends ItemView {
         ResolutionTime.HOUR,
         RestrictKind.ACTIVITY)
 
-      if (isFetchedDataAndHeaders(dataAndHeaders) && dataAndHeaders.data && dataAndHeaders.data.convertedRows) {
+      if (isFetchedDataAndHeaders(dataAndHeaders) && dataAndHeaders.data && dataAndHeaders.data.convertedRows &&
+        dataAndHeaders.headers.apiStatus == ApiStatus.AVAILABLE) {
         
         await status.setText("Time-course change of today's pulse")
         const {productivityPulse, } = await calculateProductivityPulse(dataAndHeaders.data.convertedRows)

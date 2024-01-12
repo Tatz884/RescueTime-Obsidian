@@ -9,6 +9,7 @@ import { DataService } from "../api/DataService"; // Adjust the path as needed
 import { FetchedDataAndHeaders } from "../model/DataStore";
 import { isFetchedDataAndHeaders } from "../util/TypeGuards";
 import { isApiStatus } from "../util/TypeGuards";
+import { ApiStatus } from "../model/DataStore";
 
 export async function codeBlockHandler(
     source: string,
@@ -31,7 +32,8 @@ export async function codeBlockHandler(
     const dataService = new DataService(plugin);
     let dataAndHeaders = await dataService.fetchAndProcessData(period, ResolutionTime.DAY, RestrictKind.PRODUCTIVITY);
 
-    if (isFetchedDataAndHeaders(dataAndHeaders) && dataAndHeaders.data && dataAndHeaders.data.convertedRows) {
+    if (isFetchedDataAndHeaders(dataAndHeaders) && dataAndHeaders.data && dataAndHeaders.data.convertedRows &&
+    dataAndHeaders.headers.apiStatus == ApiStatus.AVAILABLE) {
         createElements(codeBlockWrapper, dataAndHeaders)
         renderCharts(codeBlockWrapper, dataAndHeaders)
         handleResponsiveDesign(codeBlockWrapper);
