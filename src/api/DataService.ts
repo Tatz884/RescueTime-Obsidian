@@ -1,5 +1,5 @@
 import { getFetchedDataByPeriodAndResolution, setFetchedData } from "../store/DataStore";
-import { ResolutionTime, RestrictKind, FetchedDataAndHeaders, Period } from "../model/DataStore";
+import { ResolutionTime, RestrictKind, FetchedDataAndHeaders, Period, ApiStatus } from "../model/DataStore";
 import { isFetchedDataAndHeaders, isApiStatus } from "../util/TypeGuards";
 import RescueTimePlugin from "../../main";
 
@@ -25,7 +25,7 @@ export class DataService {
         return response;
     }
     
-    public async fetchAndProcessData(period: Period, resolution: ResolutionTime, restrict_kind: RestrictKind, attempt = 1): Promise<FetchedDataAndHeaders | void> {
+    public async fetchAndProcessData(period: Period, resolution: ResolutionTime, restrict_kind: RestrictKind, attempt = 1): Promise<FetchedDataAndHeaders | ApiStatus | void> {
         await this.fetchAndSetData(period, resolution, restrict_kind);
         let dataAndHeaders = await getFetchedDataByPeriodAndResolution(period, resolution, restrict_kind);
         
@@ -34,7 +34,11 @@ export class DataService {
                 await this.fetchAndSetData(period, resolution, restrict_kind);
                 return await this.fetchAndProcessData(period, resolution, restrict_kind, attempt + 1);
             }
-            console.error(isApiStatus(dataAndHeaders) ? dataAndHeaders : "error: data could not be obtained");
+            console.warn(isApiStatus(dataAndHeaders) ? dataAndHeaders : "error: data could not be obtained");
+
+        if (dataAndHeaders) {
+            return dataAndHeaders;
+        }
         } else if (isFetchedDataAndHeaders(dataAndHeaders) && dataAndHeaders.data && dataAndHeaders.data.convertedRows) {
             return dataAndHeaders;
         } else {

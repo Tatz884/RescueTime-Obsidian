@@ -39,19 +39,31 @@ export class RescueTimeRightPaneView extends ItemView {
     const wrapper = container.createEl("div", { cls: "wrapper"});
     const status = wrapper.createEl("div", { cls: "status"});
     const productivityChart = wrapper.createEl("canvas", {cls: "productivityChart"})
-    const doughnutTitle = wrapper.createEl("div", { text: "Today's productivity pulse", cls: "doughnutTitle" });
+    const doughnutTitle = wrapper.createEl("div", { text: "", cls: "doughnutTitle" });
     const doughnutContainer = wrapper.createEl("div", { cls: "doughnutContainer" });
     const score = doughnutContainer.createEl("div", { cls: "score" });
     const doughnutChart = doughnutContainer.createEl("canvas", { cls: "doughnutChart" });
-    const barHourlyTitle = wrapper.createEl("div", { text: "Hourly productivity", cls: "barHourlyTitle" });
+    const barHourlyTitle = wrapper.createEl("div", { text: "", cls: "barHourlyTitle" });
     const barHourlyChart = wrapper.createEl("canvas", { cls: "barHourlyChart" });
-    const barCategoryTitle = wrapper.createEl("div", { text: "Category vs time spent", cls: "barCategoryTitle" });
+    const barCategoryTitle = wrapper.createEl("div", { text: "", cls: "barCategoryTitle" });
     const barCategoryChart = wrapper.createEl("canvas", { cls: "barCategoryChart" });
     
     let productivityPulseChart: any
     let hourlyBarChartContent: any
     let doughnutChartContent: any
     let barCategoryChartContent: any
+
+    function setAllTexts() {
+      doughnutTitle.setText("Today's productivity pulse")
+      barHourlyTitle.setText("Hourly productivity")
+      barCategoryTitle.setText("Category vs time spent")
+    }
+  
+    function modifyTextsInError() {
+      doughnutTitle.setText("")
+      barHourlyTitle.setText("")
+      barCategoryTitle.setText("")
+    }
 
     const dataService = new DataService(this._plugin);
 
@@ -69,8 +81,6 @@ export class RescueTimeRightPaneView extends ItemView {
         ResolutionTime.MINUTE,
         RestrictKind.PRODUCTIVITY);
 
-        console.log(dataAndHeaders)
-
       if (isFetchedDataAndHeaders(dataAndHeaders) && dataAndHeaders.data && dataAndHeaders.data.convertedRows &&
       dataAndHeaders.headers.apiStatus == ApiStatus.AVAILABLE) {  
 
@@ -81,12 +91,13 @@ export class RescueTimeRightPaneView extends ItemView {
         }
 
         productivityPulseChart = await renderProductivityPulseChart(dataAndHeaders.data.convertedRows, productivityChartCtx)
+        setAllTexts()
       } else if (isApiStatus(dataAndHeaders)) {
         await status.setText(`${dataAndHeaders}`)
-        doughnutTitle.setText(``)
+        modifyTextsInError()
       }  else if (dataAndHeaders?.headers.apiStatus) {
         await status.setText(`${dataAndHeaders.headers.apiStatus}`)
-        doughnutTitle.setText(``)
+        modifyTextsInError()
       }
     }
 
@@ -110,7 +121,7 @@ export class RescueTimeRightPaneView extends ItemView {
 
       if (isFetchedDataAndHeaders(dataAndHeaders) && dataAndHeaders.data && dataAndHeaders.data.convertedRows &&
         dataAndHeaders.headers.apiStatus == ApiStatus.AVAILABLE) {
-        
+        setAllTexts()
         await status.setText("Time-course change of today's pulse")
         const {productivityPulse, } = await calculateProductivityPulse(dataAndHeaders.data.convertedRows)
         const productivityPulseDisplay = String(Math.round(productivityPulse))
@@ -140,8 +151,10 @@ export class RescueTimeRightPaneView extends ItemView {
         await getProductivityPulse(dataAndHeaders.data.convertedRows, displayScore)
       } else if (isApiStatus(dataAndHeaders)) {
         await status.setText(`${dataAndHeaders}`)
+        modifyTextsInError()
       } else if (dataAndHeaders?.headers.apiStatus) {
         await status.setText(`${dataAndHeaders.headers.apiStatus}`)
+        modifyTextsInError()
       }
     }
 
@@ -164,6 +177,8 @@ export class RescueTimeRightPaneView extends ItemView {
 
 
   }
+
+
 
   getIcon(): string {
     return "rescueTime";

@@ -40,8 +40,10 @@ export async function codeBlockHandler(
         loading.setText("") // This is not a best practice; Need to think a better way to delete "loading..."
     }  else if (isApiStatus(dataAndHeaders)) {
         const error = el.createEl("div", { text: `${dataAndHeaders}`, cls: "errorMessage" });
+        loading.setText("");
       } else if (dataAndHeaders?.headers.apiStatus) {
         const error = el.createEl("div", { text: `${dataAndHeaders?.headers.apiStatus}`, cls: "errorMessage" });
+        loading.setText("");
       }
 }
 
