@@ -5,7 +5,7 @@ import { Interval } from "../model/ChartSetting";
 import { renderDoughnutChart } from "../ui/component/DoughnutChart";
 import { getProductivityPulse } from "../ui/component/ProductivityPulse";
 import RescueTimePlugin from "../../main";
-import { DataService } from "../api/DataService"; // Adjust the path as needed
+import { DataService } from "../api/DataService";
 import { FetchedDataAndHeaders } from "../model/DataStore";
 import { isFetchedDataAndHeaders } from "../util/TypeGuards";
 import { isApiStatus } from "../util/TypeGuards";

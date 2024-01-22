@@ -63,6 +63,7 @@ export class RescueTimeRightPaneView extends ItemView {
       doughnutTitle.setText("")
       barHourlyTitle.setText("")
       barCategoryTitle.setText("")
+      score.setText("")
     }
 
     const dataService = new DataService(this._plugin);
